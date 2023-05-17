@@ -1,16 +1,20 @@
 package negocio;
 
-import java.util.ArrayList;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Persona {
 	private int _legajo;
 	private String _apellido;
 	private int _calificacion;
-	private Rol _rol;
-	private ArrayList<Persona> _listaIncompatibles = new ArrayList<Persona>();
+	private String _rol;
+	transient private HashSet<Arista> compatibles = new HashSet<>();
+
+
 	
 	
-	public Persona(int legajo, String apellido, int calificacion, Rol _rol)
+	public Persona(int legajo, String apellido, int calificacion, String _rol)
 	{
 		this._legajo=legajo;
 		this._apellido=apellido;
@@ -18,14 +22,23 @@ public class Persona {
 		this._rol=_rol;
 	}
 	
-	public void agregarIncompatibles(Persona persona)
-	{
-		this._listaIncompatibles.add(persona);
+
+
+	// devuelvo los vecinos de un nodo
+	public Set<Arista> getCompatibles() {
+		return compatibles;
+	}
+	
+public void agregarCompatible( Persona nodoDestino) {
 		
+		if (this.compatibles.contains(new Arista(this, nodoDestino))) {
+			throw new IllegalArgumentException("La arista ya existe");
+		}
+		compatibles.add(new Arista(this, nodoDestino));
+
 	}
-	public ArrayList<Persona> getListaIncompatibles() {
-		return _listaIncompatibles;
-	}
+	
+	
 	
 	public int geLegajo() {
 		return _legajo;
@@ -50,7 +63,9 @@ public class Persona {
 	public void setCalificacion(int _calificacion) {
 		this._calificacion = _calificacion;
 	}
-
+	public String get_rol() {
+		return _rol;
+	}
 
 	@Override
 	public String toString() {
