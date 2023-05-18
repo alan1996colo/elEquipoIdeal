@@ -10,8 +10,8 @@ public class PersonaTest {
 
 	@Test
 	public void mainTest() {
-		Persona A = new Persona(175,"Flores",1,"Tester");
-		Persona B = new Persona(176,"Perez",2,"Lider");
+		Persona A = new Persona("Flores",1,"Tester");
+		Persona B = new Persona("Perez",2,"Lider");
 		A.agregarCompatible(B);
 		Iterator<Arista> iterator = A.getCompatibles().iterator();
 		if (iterator.hasNext()) {
