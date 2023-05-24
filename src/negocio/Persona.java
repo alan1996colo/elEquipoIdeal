@@ -67,6 +67,16 @@ public void agregarCompatible( Persona nodoDestino) {
 				+ ", rol = " + _rol + "]";
 	}
 	
+	 @Override
+	    public int hashCode() {
+	        final int prime = 31;
+	        int result = 1;
+	        result = prime * result + ((this._apellido == null) ? 0 : this._apellido.hashCode());
+	        result = prime * result + ((this._calificacion == 0) ? 0 : this._calificacion);
+	        result = prime * result + ((this._rol == null) ? 0 : this._rol.hashCode());
+	  
+	        return result;
+	    }
 
 	
 	

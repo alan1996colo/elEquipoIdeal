@@ -21,20 +21,30 @@ public class Negocio {
 	/*Dado dos apellidos pasados, lo busca en el grafo y agrega la arista
 	 * Aun NO TESTEADO, FALTA HACER TEST.*/
 	public boolean agregarCompatibilidad(String apellidoOrigen, String apellidoDestino) {
-		if(this.personas==null) {throw new RuntimeException("El grafo se encuentra vacio.");}
-		Persona temp=new Persona(null,0,null);
-		for(Persona iter:this.getPersonas().getPersonas()) {
-			if(iter.getApellido().equals(apellidoOrigen)||iter.getApellido().equals(apellidoDestino)) {
-				temp=iter;
-			}
-			if((iter.getApellido().equals(apellidoOrigen)||iter.getApellido().equals(apellidoDestino)) && iter!=temp) {
-				iter.agregarCompatible(temp);
-				temp.agregarCompatible(iter);
-				return true;
-			}
-		}
-		return false;
+	    if (this.personas == null) {
+	        throw new RuntimeException("El grafo se encuentra vacio.");
+	    }
+
+	    Persona origen = null;
+	    Persona destino = null;
+
+	    for (Persona persona : this.getPersonas().getPersonas()) {
+	        if (persona.getApellido().equals(apellidoOrigen)) {
+	            origen = persona;
+	        } else if (persona.getApellido().equals(apellidoDestino)) {
+	            destino = persona;
+	        }
+
+	        if (origen != null && destino != null) {
+	            origen.agregarCompatible(destino);
+	            destino.agregarCompatible(origen);
+	            return true;
+	        }
+	    }
+
+	    return false;
 	}
+
 	
 	/**Retorna todos los nombres ingresados*/
 	public String[] getNombres() {
