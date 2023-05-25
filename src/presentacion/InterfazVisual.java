@@ -1,11 +1,9 @@
 package presentacion;
 
 import negocio.Negocio;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,39 +13,41 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import java.awt.color.*;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+
 import java.awt.Graphics;
-import java.awt.GridLayout;
 
 public class InterfazVisual {
 
 	private Negocio negocio;
 	private JFrame frame;
-	private JTextField tfName;	
+	private JTextField tfName;
 	private JTextArea textArea;
-	private JMenuItem cargarArchivoItem,guardarArchivoItem,requerimientoItem,compatiblesMenu,incompatiblesMenu,empleadoItem;
-	private JButton botonAgregarPersona, botonAgregarCompatibilidad;
+	private JMenuItem cargarArchivoItem, guardarArchivoItem, requerimientoItem, compatiblesMenu, incompatiblesMenu,
+			empleadoItem;
+	private JButton botonAgregarPersona, botonAgregarCompatibilidad, botonAgregarIncompatibilidad;
 	private JComboBox<String> rolElegido;
 	private JComboBox<Integer> calificacionElegida;
-	private JPanel pantallaAgregarPersona, pantallaDisponibles;
+	private JPanel pantallaPrincipal;
 	private JComboBox<String> personasDisponiblesOrigen;
 	private JCheckBox[] personasDisponiblesDestino;
-	
+	private int tamanio = 2;
+	private JButton botonAgregarRequerimiento;
+	private String nombres[] = { "" };
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -65,10 +65,7 @@ public class InterfazVisual {
 	public InterfazVisual() {
 		negocio = new Negocio();
 		initialize();
-		eventoNombre();
 		eventosMenu();
-		eventoBotonAgregar();
-		eventoBotonAgregarCompatibilidad();
 
 	}
 
@@ -78,14 +75,8 @@ public class InterfazVisual {
 	private void initialize() {
 
 		launchWindows();
-		seccionNombre();
-		seccionRol();
 		fileMenuBar();
-		seccionCalificacion();
 		solucionMenuBar();
-		crearBotonAgregarPersona();
-		crearBotonAgregarCompatibilidad();
-		loadTextArea();
 
 	}
 
@@ -97,18 +88,23 @@ public class InterfazVisual {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 
-		pantallaAgregarPersona = new JPanel();
-		pantallaAgregarPersona.setLayout(null);
-		pantallaAgregarPersona.setBounds(0, 0, 800, 600);
-		pantallaAgregarPersona.setVisible(true);
-		pantallaAgregarPersona.add(loadTextArea());
-		frame.getContentPane().add(pantallaAgregarPersona);
+		crearPantallaPrincipal();
+	}
 
-		pantallaDisponibles = new JPanel();
-		pantallaDisponibles.setLayout(null);
-		pantallaDisponibles.setBounds(0, 0, 800, 600);
-		pantallaDisponibles.setVisible(false);
-		frame.getContentPane().add(pantallaDisponibles);
+	public void crearPantallaPrincipal() {
+
+		pantallaPrincipal = new JPanel();
+		pantallaPrincipal.setLayout(null);
+		pantallaPrincipal.setBounds(0, 0, 800, 600);
+		pantallaPrincipal.add(loadTextArea());
+
+		divNombre();
+		divRol();
+		divCalificacion();
+		crearBotonAgregarPersona();
+		pantallaPrincipal.setVisible(true);
+
+		frame.getContentPane().add(pantallaPrincipal);
 
 	}
 
@@ -163,9 +159,10 @@ public class InterfazVisual {
 		solucionMenu.add(empleadoItem);
 	}
 
-//~~~~~~~~~~~primer pantalla agregar persona, rol, puntuacion~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ~~~~~~~~~~~primer pantalla agregar persona, rol,
+	// puntuacion~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	private void seccionNombre() {
+	private void divNombre() {
 
 		tfName = new JTextField() {
 			@Override
@@ -179,11 +176,12 @@ public class InterfazVisual {
 			}
 		};
 		tfName.setBounds(20, 10, 170, 30); // Establecer las coordenadas y dimensiones del JTextField dentro del JPanel
-		pantallaAgregarPersona.add(tfName);
+		pantallaPrincipal.add(tfName);
+		eventoNombre();
 
 	}
 
-	private void seccionRol() {
+	private void divRol() {
 		JPanel panel = new JPanel();
 
 		String[] roles = { "Rol", "Tester", "Programador", "Arquitecto", "Lider de proyexto" };
@@ -191,10 +189,10 @@ public class InterfazVisual {
 		rolElegido.setToolTipText("Seleccione el Rol correspondiente a la persona.");
 		panel.add(rolElegido);
 		panel.setBounds(10, 70, 170, 31);
-		pantallaAgregarPersona.add(panel);
+		pantallaPrincipal.add(panel);
 	}
 
-	private void seccionCalificacion() {
+	private void divCalificacion() {
 		JPanel panel = new JPanel();
 
 		Integer[] roles = { 1, 2, 3, 4, 5 };
@@ -204,28 +202,28 @@ public class InterfazVisual {
 
 		panel.add(calificacionElegida);
 		panel.setBounds(120, 70, 170, 31);
-		pantallaAgregarPersona.add(panel);
+		pantallaPrincipal.add(panel);
 	}
 
 	public void crearBotonAgregarPersona() {
 		botonAgregarPersona = new JButton("Agregar");
 		botonAgregarPersona.setBounds(20, 120, 100, 30);
-		pantallaAgregarPersona.add(botonAgregarPersona);
+		pantallaPrincipal.add(botonAgregarPersona);
+		eventoBotonAgregar();
 	}
 
-//~~~~~~~~~~~~~~~~~~~~~~~~	pantalla agregar compatibilidad origen-destino ~~~~~~~~~~~~~~	~~~~~~~~~~
-	public void crearSeccionPersonasDisponibleOrigen() {
-		String[] nombres = negocio.getNombres();
+	// ~~~~~~~~~~~~~~~~~~~~~~~~ pantalla agregar in/compatibilidad origen-destino
+	// ~~~~~~~~~~~~~~ ~~~~~~~~~~
+	public void divPersonasDisponibleOrigen() {
 
 		personasDisponiblesOrigen = new JComboBox<>(nombres);
 		personasDisponiblesOrigen
 				.setToolTipText("Seleccione entre las personas disponibles para agregar compatibilidad");
 		personasDisponiblesOrigen.setBounds(10, 50, 100, 20);
-		pantallaDisponibles.add(personasDisponiblesOrigen);
+		pantallaPrincipal.add(personasDisponiblesOrigen);
 	}
 
-	private void crearSeccionPersonasDisponibleDestino() {
-		String[] nombres = negocio.getNombres();
+	private void divPersonasDisponibleDestinoEn() {
 
 		JPanel panelCheckboxes = new JPanel();
 		panelCheckboxes.setLayout(null);
@@ -238,7 +236,7 @@ public class InterfazVisual {
 		}
 		JScrollPane scrollPane = new JScrollPane(panelCheckboxes);
 		scrollPane.setBounds(120, 0, 100, 100);
-		pantallaDisponibles.add(scrollPane);
+		pantallaPrincipal.add(scrollPane);
 
 		panelCheckboxes.setPreferredSize(new Dimension(100, nombres.length * 25));
 	}
@@ -247,8 +245,33 @@ public class InterfazVisual {
 		botonAgregarCompatibilidad = new JButton("Agregar compatibilidad");
 		botonAgregarCompatibilidad.setLayout(null);
 		botonAgregarCompatibilidad.setBounds(12, 150, 200, 20);
-		pantallaDisponibles.add(botonAgregarCompatibilidad);
-	
+		pantallaPrincipal.add(botonAgregarCompatibilidad);
+		eventoBotonAgregarCompatibilidad();
+	}
+
+	public void crearBotonAgregarIncompatibilidad() {
+		botonAgregarIncompatibilidad = new JButton("Agregar incompatibilidad");
+		botonAgregarIncompatibilidad.setLayout(null);
+		botonAgregarIncompatibilidad.setBounds(12, 150, 200, 20);
+		pantallaPrincipal.add(botonAgregarIncompatibilidad);
+
+	}
+
+	// ---------------------------Pantalla solicitar
+	// requerimienttos--------------------------
+	public void crearSpinnerCantidad() {
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, tamanio, 1);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		spinner.setBounds(180, 75, 40, 25);
+		pantallaPrincipal.add(spinner);
+	}
+
+	public void crearBotonAgregarRequerimiento() {
+		botonAgregarRequerimiento = new JButton("Agregar Requerimiento");
+		botonAgregarRequerimiento.setLayout(null);
+		botonAgregarRequerimiento.setBounds(12, 150, 200, 20);
+		pantallaPrincipal.add(botonAgregarRequerimiento);
+
 	}
 
 	// ~~~~~~~~~~~Funciones y eventos~~~~~~~~~~~~~~~
@@ -260,21 +283,46 @@ public class InterfazVisual {
 			public void actionPerformed(ActionEvent e) {
 				negocio.agregarPersona(tfName.getText(), (int) calificacionElegida.getSelectedItem(),
 						(String) rolElegido.getSelectedItem());
-
+				actualizarNombres();
 				System.out.println("Se ha presionado el boton agregar");
 			}
 		});
 
 	}
 
+	public void actualizarNombres() {
+		this.nombres = negocio.getNombres();
+	}
+
+	public void actualizarTamanio() {
+		this.tamanio = negocio.getPersonas().getTamanio();
+	}
+
 	public void eventoBotonAgregarCompatibilidad() {
 		botonAgregarCompatibilidad.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				for (int i = 0; i < personasDisponiblesDestino.length; i++) {
 					if (personasDisponiblesDestino[i].isSelected()) {
 						negocio.agregarCompatibilidad((String) personasDisponiblesOrigen.getSelectedItem(),
 								(String) personasDisponiblesDestino[i].getText());
 						System.out.println("Se ha presionado el boton agregar compatibilidad");
+
+					}
+				}
+
+			}
+		});
+	}
+
+	public void eventoBotonAgregarIncompatibilidad() {
+		botonAgregarIncompatibilidad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < personasDisponiblesDestino.length; i++) {
+					if (personasDisponiblesDestino[i].isSelected()) {
+						negocio.agregarinCompatibilidad((String) personasDisponiblesOrigen.getSelectedItem(),
+								(String) personasDisponiblesDestino[i].getText());
+						System.out.println("Se ha presionado el boton agregar incompatibilidad");
 
 					}
 				}
@@ -316,20 +364,58 @@ public class InterfazVisual {
 
 		compatiblesMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pantallaAgregarPersona.setVisible(false);
-				crearSeccionPersonasDisponibleOrigen();
-				crearSeccionPersonasDisponibleDestino();
-				
-				pantallaDisponibles.add(loadTextArea());
-				pantallaDisponibles.setVisible(true);
+				pantallaPrincipal.removeAll();
+
+				divPersonasDisponibleOrigen();
+				divPersonasDisponibleDestinoEn();
+				crearBotonAgregarCompatibilidad();
+				pantallaPrincipal.add(loadTextArea());
+				pantallaPrincipal.revalidate();
+				pantallaPrincipal.repaint();
 				System.out.println("se ha cambiado de panel..");
 			}
 		});
 		empleadoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pantallaAgregarPersona.setVisible(true);
-				pantallaDisponibles.setVisible(false);
+
+				pantallaPrincipal.removeAll();
+				pantallaPrincipal.setVisible(false);
+				crearPantallaPrincipal();
+
 				System.out.println("se ha clickeado en agregar empleado");
+			}
+		});
+
+		incompatiblesMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pantallaPrincipal.removeAll();
+				pantallaPrincipal.setVisible(false);
+				divPersonasDisponibleOrigen();
+				divPersonasDisponibleDestinoEn();
+
+				pantallaPrincipal.add(loadTextArea());
+				crearBotonAgregarIncompatibilidad();
+				pantallaPrincipal.setVisible(true);
+				System.out.println("se ha cambiado de panel.. a incompatibilidad");
+			}
+		});
+		requerimientoItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (negocio.getPersonas().getTamanio() == 0) {
+					JOptionPane.showMessageDialog(null,
+							"Antes de ir a los requerimientos deberia cargar una lista de personas...");
+				} else {
+					actualizarTamanio();
+					pantallaPrincipal.removeAll();
+					pantallaPrincipal.setVisible(false);
+					crearBotonAgregarRequerimiento();
+					crearSpinnerCantidad();
+					divRol();
+
+					pantallaPrincipal.setVisible(true);
+
+					System.out.println("se ha cambiado de panel.. a requerimientos");
+				}
 			}
 		});
 

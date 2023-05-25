@@ -21,5 +21,44 @@ public class PersonaTest {
 		System.out.println(primerElemento.toString());
 		}
 	}
+	@Test
+	public void personaEqualsTest(){
+		Persona a=new Persona("alg", 2, "asd");
+		Persona b=new Persona("alg", 2, "asd");
+		assertTrue(a.equals(b));
+	}
+	@Test
+	public void personaEqualsTest2(){
+		Persona a=new Persona("alg", 2, "asd");
+		Persona b=a;
+		assertTrue(a.equals(b));
+	}
+	@Test
+	public void quitarCompatibleTest(){
+		GrafoLista grafo=new GrafoLista();
+		Persona p1=new Persona("matias",1,"barbero");
+		Persona p2=new Persona("marcos",1,"peluquero");
+		grafo.agregarPersona(p1);
+		grafo.agregarPersona(p2);
+		grafo.agregarArista(p1, p2);
+		p2.quitarCompatible(p1);
+		assertTrue(p2.getCompatibles().size()==0);
+	}
+	@Test
+	public void quitarCompatibleTest2(){
+		GrafoLista grafo=new GrafoLista();
+		Persona p1=new Persona("matias",1,"barbero");
+		Persona p2=new Persona("marcos",1,"peluquero");
+		Persona p3=new Persona("mars",1,"peluqro");
+		grafo.agregarPersona(p1);
+		grafo.agregarPersona(p2);
+		grafo.agregarPersona(p3);
+
+		grafo.agregarArista(p1, p2);
+		grafo.agregarArista(p3, p2);
+
+		p2.quitarCompatible(p1);
+		assertTrue(p2.getCompatibles().size()==1);
+	}
 
 }
