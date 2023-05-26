@@ -1,14 +1,16 @@
 package negocio;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Persona {
+public class Persona implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String _apellido;
 	private int _calificacion;
 	private String _rol;
-	transient private HashSet<Arista> compatibles = new HashSet<>();
+	 private HashSet<Arista> compatibles = new HashSet<>();
 
 	public Persona(String apellido, int calificacion, String _rol) {
 
