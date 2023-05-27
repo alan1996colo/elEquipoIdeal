@@ -10,7 +10,7 @@ public class Persona implements Serializable {
 	private String _apellido;
 	private int _calificacion;
 	private String _rol;
-	 private HashSet<Arista> compatibles = new HashSet<>();
+	private HashSet<Arista> compatibles = new HashSet<>();
 
 	public Persona(String apellido, int calificacion, String _rol) {
 
