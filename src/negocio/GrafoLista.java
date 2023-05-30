@@ -101,4 +101,15 @@ public class GrafoLista implements Serializable {
 		}
 	}
 
+	public boolean sonVecinos(Persona persona1, Persona persona2) {
+		
+		for(Persona per: Personas) {
+			if(per.equals(persona1)) {
+				return per.estaPersona(persona2);
+			}
+		}
+		
+		return false;
+	}
+
 }

@@ -23,6 +23,10 @@ public class Persona implements Serializable {
 	public Set<Arista> getCompatibles() {
 		return compatibles;
 	}
+	
+	public boolean  estaPersona(Persona persona) {
+		return this.compatibles.contains(new Arista(this,persona));
+	}
 
 	public void agregarCompatible(Persona nodoDestino) {
 
