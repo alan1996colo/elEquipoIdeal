@@ -2,6 +2,7 @@ package negocio;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Test;
 
 import data.GestorArchivos;
@@ -27,5 +28,12 @@ public class GrafoListaTest {
 		assertTrue(test.getPersonaNum(0).estaPersona(Persona3));
 
 	}
+	
+	@After
+	public void clean() {
+		GestorArchivos g=new GestorArchivos();
+		g.borrarArchivo("inicializarAristaTest.json");
+	}
+	
 
 }

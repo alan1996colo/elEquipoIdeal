@@ -103,13 +103,13 @@ public class GestorArchivosTest {
 
 	@Test
 	public void cargarJsonEnGrafoLista() {
-		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
+		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("test.json"));
 		System.out.println(temp.getPersonaNum(2).getApellido());
 	}
 
 	@Test
 	public void cargarJsonEnGrafoListaGetNumber() {
-		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
+		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("test.json"));
 		System.out.println(temp.getPersonaNum(2).getApellido());
 		System.out.println(temp.getPersonaNum(2).getCalificacion());
 
@@ -117,7 +117,7 @@ public class GestorArchivosTest {
 
 	@Test
 	public void cargarJsonMostrarArista() {
-		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
+		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("test.json"));
 		System.out.println("lista de compatibles es : " + temp.getPersonaNum(1).getCompatibles().toString());
 
 	}
@@ -137,7 +137,7 @@ public class GestorArchivosTest {
 	@Test
 	public void generarJsonListaCongenerarJson() {
 		GrafoLista temp = new GrafoLista();
-		Persona Persona = new Persona("Alan", 2, "Tech Lead");
+		Persona Persona = new Persona("Alan", 5, "Tech Lead");
 		Persona Persona2 = new Persona("Hernan", 2, "Dev Trainee");
 		Persona Persona3 = new Persona("Alejandro", 2, "out");
 		temp.agregarPersona(Persona3);
@@ -145,7 +145,7 @@ public class GestorArchivosTest {
 		temp.agregarPersona(Persona);
 		temp.agregarArista(Persona2, Persona3);
 		temp.agregarArista(Persona2, Persona);
-		assertTrue(gestor.generarJSON("generado.json", temp.getPersonas()));
+		assertTrue(gestor.generarJSON("test.json", temp.getPersonas()));
 
 	}
 

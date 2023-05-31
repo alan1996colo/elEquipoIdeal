@@ -1,5 +1,7 @@
 package negocio;
 
+import data.GestorArchivos;
+
 public class Negocio {
 	GrafoLista personas;
 
@@ -17,6 +19,23 @@ public class Negocio {
 		}
 
 	};
+	
+	
+	/**Reemplaza el grafo actual por el cargado desde el archivo y lo inicializa.**/
+	public void cambiarSesion(String fname) {
+		GestorArchivos gestor=new GestorArchivos();
+		this.personas.setPersonas(gestor.cargarJsonLista(fname));
+		this.personas.inicializarAristas();
+		
+		
+		
+	}
+	
+	public void guardarSesion(String fname) {
+		GestorArchivos gestor=new GestorArchivos();
+		gestor.generarJSON(fname, this.personas.getPersonas());
+	}
+	
 
 	public GrafoLista getPersonas() {
 		return this.personas;

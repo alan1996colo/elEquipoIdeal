@@ -164,6 +164,7 @@ public class InterfazVisual {
 	// ~~~~~~~~~~~primer pantalla agregar persona, rol,
 	// puntuacion~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	@SuppressWarnings("serial")
 	private void divNombre() {
 
 		tfName = new JTextField() {
@@ -353,17 +354,17 @@ public class InterfazVisual {
 
 	private void eventosMenu() {
 		JFileChooser fc = new JFileChooser();
-		File initialDir = new File("src/fileManager/");
+		File initialDir = new File("src/data/");
 		fc.setCurrentDirectory(initialDir); // Establecer directorio inicial
 		cargarArchivoItem.addActionListener(ev -> {
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
 				try {
-					// System.out.println(file.getPath());
+				
 
-					// **codigo de capa de negocio para cambiar el grafoLista por el el
-					// archivoSeleccionado fname, usando gestorArchivos.
+					negocio.cambiarSesion(file.getName());
+					 System.out.println("Se ha seleccionado el archivo " + file.getName());
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -373,11 +374,25 @@ public class InterfazVisual {
 			}
 		});
 
-		guardarArchivoItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Se ha seleccionado 'Guardar Archivo'");
+		guardarArchivoItem.addActionListener(ev -> {
+			fc.setDialogTitle("Especifique el archivo a guardar");
+			int returnVal = fc.showSaveDialog(frame);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File fileToSave = fc.getSelectedFile();
+				try {
+					negocio.guardarSesion(fileToSave.getName());
+					// Desde acá hay que seguir para dibujar todos los puntos
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				// El usuario canceló el diálogo de selección de archivo
+				System.out.println("Selección de archivo cancelada");
 			}
 		});
+		
+		
+		
 
 		compatiblesMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

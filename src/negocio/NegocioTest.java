@@ -30,13 +30,13 @@ public class NegocioTest {
 	public void agregarCompatibilidadTest() {
 		negocio.agregarPersona("Hernan", 1, "dev");
 		negocio.agregarPersona("Alejandro", 3, "dev");
-		System.out.println(negocio.agregarCompatibilidad("Hernan", "Alejandro"));
+		negocio.agregarCompatibilidad("Hernan", "Alejandro");
 
 		Persona p1 = new Persona("Hernan", 1, "dev");
 		Persona p2 = new Persona("Alejandro", 3, "dev");
 
 		Arista ar = new Arista(p1, p2);
-		System.out.println(negocio.getPersonas().getPersonas().get(0).getCompatibles().toString());
+		//System.out.println(negocio.getPersonas().getPersonas().get(0).getCompatibles().toString());
 		assertTrue(negocio.getPersonas().getPersonas().get(0).getCompatibles().contains(ar));
 		// resuelto, no estaba implementado ni el equals de persona ni el de arista.
 		// Ahora esto esta solucionado
@@ -64,6 +64,14 @@ public class NegocioTest {
 		Arista a1 = new Arista(new Persona("alan", 0, "perro"), new Persona("asd", 0, "asdf"));
 		Arista a2 = new Arista(new Persona("alan", 0, "perro"), new Persona("asd", 0, "asdf"));
 		assertTrue(a1.equals(a2));
+	}
+	@Test
+	public void cambiarSesionTest() {
+		negocio.agregarPersona("nicolas", 0, "null");
+		negocio.agregarPersona("vanesa", 0, "moza");
+		negocio.agregarCompatibilidad("nicolas", "vanesa");
+		negocio.cambiarSesion("test.json");//Este es un archivo recurrente que se usa desde distintos JunitTest.
+		System.out.println(negocio.getPersonas().getPersonas().toString());//como la salida es distinta a los valores ingresados, claramente el cambio 
 	}
 
 }
