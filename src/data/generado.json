@@ -1,20 +1,39 @@
 [
   {
-    "_apellido": "mz",
+    "_apellido": "Alejandro",
     "_calificacion": 2,
-    "_rol": "5432",
-    "compatibles": []
+    "_rol": "out",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Alejandro",
+        "personaDestinoNombre": "Hernan"
+      }
+    ]
   },
   {
-    "_apellido": "muiz",
+    "_apellido": "Hernan",
     "_calificacion": 2,
-    "_rol": "51432",
-    "compatibles": []
+    "_rol": "Dev Trainee",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Hernan",
+        "personaDestinoNombre": "Alejandro"
+      },
+      {
+        "personaOrigenNombre": "Hernan",
+        "personaDestinoNombre": "Alan"
+      }
+    ]
   },
   {
-    "_apellido": "muz",
+    "_apellido": "Alan",
     "_calificacion": 2,
-    "_rol": "523432",
-    "compatibles": []
+    "_rol": "Tech Lead",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Alan",
+        "personaDestinoNombre": "Hernan"
+      }
+    ]
   }
 ]

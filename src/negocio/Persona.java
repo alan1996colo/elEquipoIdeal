@@ -23,9 +23,10 @@ public class Persona implements Serializable {
 	public Set<Arista> getCompatibles() {
 		return compatibles;
 	}
-	
-	public boolean  estaPersona(Persona persona) {
-		return this.compatibles.contains(new Arista(this,persona));
+
+	// Hay que testear esto.
+	public boolean estaPersona(Persona persona) {
+		return this.compatibles.contains(new Arista(this, persona));
 	}
 
 	public void agregarCompatible(Persona nodoDestino) {
@@ -59,8 +60,7 @@ public class Persona implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Persona  apellido = " + _apellido + ", calificacion = " + _calificacion
-				+ ", rol = " + _rol + "]";
+		return "Persona  apellido = " + _apellido + ", calificacion = " + _calificacion + ", rol = " + _rol + "]";
 	}
 
 	@Override

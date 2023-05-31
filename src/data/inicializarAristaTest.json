@@ -1,11 +1,15 @@
 [
   {
-    "_apellido": "Alejandro",
+    "_apellido": "Alan",
     "_calificacion": 2,
-    "_rol": "out",
+    "_rol": "Tech Lead",
     "compatibles": [
       {
-        "personaOrigenNombre": "Alejandro",
+        "personaOrigenNombre": "Alan",
+        "personaDestinoNombre": "Alejandro"
+      },
+      {
+        "personaOrigenNombre": "Alan",
         "personaDestinoNombre": "Hernan"
       }
     ]
@@ -17,22 +21,18 @@
     "compatibles": [
       {
         "personaOrigenNombre": "Hernan",
-        "personaDestinoNombre": "Alejandro"
-      },
-      {
-        "personaOrigenNombre": "Hernan",
         "personaDestinoNombre": "Alan"
       }
     ]
   },
   {
-    "_apellido": "Alan",
+    "_apellido": "Alejandro",
     "_calificacion": 2,
-    "_rol": "Tech Lead",
+    "_rol": "out",
     "compatibles": [
       {
-        "personaOrigenNombre": "Alan",
-        "personaDestinoNombre": "Hernan"
+        "personaOrigenNombre": "Alejandro",
+        "personaDestinoNombre": "Alan"
       }
     ]
   }

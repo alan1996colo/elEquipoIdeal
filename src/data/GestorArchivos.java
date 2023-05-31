@@ -53,7 +53,6 @@ public class GestorArchivos implements Serializable {
 		this.path = path;
 	}
 
-
 	public boolean serializarObjeto(Object o) {
 		if (o == null) {
 			return false;
@@ -159,25 +158,11 @@ public class GestorArchivos implements Serializable {
 		}
 
 	}
-	
-	
-	
-	/*Generar Gson version 2 en implementacion**/
-	 public static void generarJSON2(String filename, ArrayList lista) {
-	        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	        String json = gson.toJson(lista);
-
-	        try (FileWriter writer = new FileWriter(filename)) {
-	            writer.write(json);
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
 
 	/**
-	 * Serializa el (UN) objeto(o) en un archivo(fname) estilo json preety
-	 * Si el archivo ya existe lo sobrescribe.
-	 * NOTA: Por el momento no estoy pudiendo serializar 
+	 * Serializa el (UN) objeto(o) en un archivo(fname) estilo json preety Si el
+	 * archivo ya existe lo sobrescribe. NOTA: Por el momento no estoy pudiendo
+	 * serializar
 	 **/
 	public boolean generarJSON(String fname, Object o) {
 		if (o == null || o.equals(null)) {
@@ -190,9 +175,9 @@ public class GestorArchivos implements Serializable {
 			FileWriter writer = new FileWriter(this.path + fname);
 			FileInputStream temp = new FileInputStream(this.path + fname);
 
-				writer.write(json);
-				writer.close();
-			
+			writer.write(json);
+			writer.close();
+
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -227,8 +212,9 @@ public class GestorArchivos implements Serializable {
 		Gson gson = new Gson();
 		try {
 
-			ArrayList<Persona> nodos = gson.fromJson(new FileReader(this.path + fname), new TypeToken<ArrayList<Persona>>() {
-			}.getType());
+			ArrayList<Persona> nodos = gson.fromJson(new FileReader(this.path + fname),
+					new TypeToken<ArrayList<Persona>>() {
+					}.getType());
 
 			return nodos;
 		} catch (Exception e) {

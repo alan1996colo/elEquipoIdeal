@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class GrafoLista implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private List<Persona> Personas;// lista de Personas
 
@@ -33,8 +33,6 @@ public class GrafoLista implements Serializable {
 		}
 	}
 
-
-
 	/*
 	 * Intenta agreagar la arista entre dos Personas compatibles
 	 */
@@ -42,15 +40,15 @@ public class GrafoLista implements Serializable {
 		if (PersonaOrigen.equals(PersonaDestino)) {
 			throw new IllegalArgumentException("No se permiten bucles");
 		} else {
-			if(PersonaOrigen.getCompatibles()==null) {
-			
+			if (PersonaOrigen.getCompatibles() == null) {
+
 			}
-			if(PersonaDestino.getCompatibles()==null) {
-				
+			if (PersonaDestino.getCompatibles() == null) {
+
 			}
-		
+
 			PersonaOrigen.agregarCompatible(PersonaDestino);
-			PersonaDestino.agregarCompatible( PersonaOrigen);
+			PersonaDestino.agregarCompatible(PersonaOrigen);
 		}
 	}
 
@@ -59,7 +57,7 @@ public class GrafoLista implements Serializable {
 		return Personas;
 	}
 
-	public int getTamanio() {// OK 
+	public int getTamanio() {// OK
 		return this.Personas.size();
 	}
 
@@ -68,7 +66,6 @@ public class GrafoLista implements Serializable {
 		return this.Personas.get(i).getCompatibles();
 
 	}
-
 
 	/**
 	 * True =contiene al Persona en su lista False= el Persona no está
@@ -82,10 +79,6 @@ public class GrafoLista implements Serializable {
 		return false;
 	}
 
-
-
-	
-
 	public void mostrarGrafo() { // NO SE USA
 		// TODO Auto-generated method stub
 		for (Persona iter : this.Personas) {
@@ -97,19 +90,50 @@ public class GrafoLista implements Serializable {
 	public void mostrarGrafoConAristas() { // OK
 		for (Persona iter : this.Personas) {
 			System.out.println(iter.getApellido() + " :");
-		//	iter.mostrarAristas(); <--desarrollar
+			// iter.mostrarAristas(); <--desarrollar
 		}
 	}
 
 	public boolean sonVecinos(Persona persona1, Persona persona2) {
-		
-		for(Persona per: Personas) {
-			if(per.equals(persona1)) {
+
+		for (Persona per : Personas) {
+			if (per.equals(persona1)) {
 				return per.estaPersona(persona2);
 			}
 		}
-		
+
 		return false;
+	}
+
+	/**
+	 * Metodo para cargar luego de la persistencia, inicializa todas las Aristas del
+	 * grafo tiene complejidad O(n^*3)
+	 */
+	public void inicializarAristas() {
+		for (Persona origen : this.Personas) {
+			Set<Arista> compatibles = new HashSet<>(origen.getCompatibles());
+			for (Arista ar : compatibles) {
+				Arista nuevaArista = new Arista(origen, getPersona(ar.getPersonaDestinoNombre()));
+				origen.getCompatibles().remove(ar);
+				origen.getCompatibles().add(nuevaArista);
+			}
+		}
+	}
+
+	/**
+	 * Retorna el objeto persona con el nombre pasado, retorna el primero que
+	 * encuentre con ese nombre.
+	 **/
+	public Persona getPersona(String nombre) {
+		if (this.Personas == null) {
+			throw new RuntimeException("No puede obtener una persona de un conjunto  vacio");
+		}
+		for (Persona p : this.Personas) {
+			if (p.getApellido().equals(nombre)) {
+				return p;
+			}
+		}
+		return null;
 	}
 
 }

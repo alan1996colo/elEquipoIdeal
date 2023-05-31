@@ -22,9 +22,8 @@ public class GestorArchivosTest {
 		gestor = new GestorArchivos();
 		name = "test.txt";
 		texto = "1234";
-		path="src/data/";
+		path = "src/data/";
 	}
-
 
 	@Test
 	public void testCrear() {
@@ -107,54 +106,48 @@ public class GestorArchivosTest {
 		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
 		System.out.println(temp.getPersonaNum(2).getApellido());
 	}
+
 	@Test
 	public void cargarJsonEnGrafoListaGetNumber() {
 		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
 		System.out.println(temp.getPersonaNum(2).getApellido());
 		System.out.println(temp.getPersonaNum(2).getCalificacion());
-		
+
 	}
+
+	@Test
+	public void cargarJsonMostrarArista() {
+		GrafoLista temp = new GrafoLista(gestor.cargarJsonLista("generado.json"));
+		System.out.println("lista de compatibles es : " + temp.getPersonaNum(1).getCompatibles().toString());
+
+	}
+
 	@Test
 	public void SerializarListaEnJSON() {
-		GrafoLista temp=new GrafoLista();
+		GrafoLista temp = new GrafoLista();
 		Persona Persona = new Persona("muz", 2, "523432");
 		Persona Persona2 = new Persona("muiz", 2, "51432");
 		Persona Persona3 = new Persona("mz", 2, "5432");
 		temp.agregarPersona(Persona3);
 		temp.agregarPersona(Persona2);
 		temp.agregarPersona(Persona);
-		assertTrue(gestor.generarJSON("jasonlista.json",temp.getPersonas()));
+		assertTrue(gestor.generarJSON("jasonlista.json", temp.getPersonas()));
 	}
-	
-	@Test 
+
+	@Test
 	public void generarJsonListaCongenerarJson() {
-		GrafoLista temp=new GrafoLista();
-		Persona Persona = new Persona("muz", 2, "523432");
-		Persona Persona2 = new Persona("muiz", 2, "51432");
-		Persona Persona3 = new Persona("mz", 2, "5432");
-		temp.agregarPersona(Persona3);
-		temp.agregarPersona(Persona2);
-		temp.agregarPersona(Persona);
-		assertTrue(gestor.generarJSON("generado.json", temp.getPersonas()));
-		
-	}
-	
-	@Test 
-	public void generarJson2() { //al parecer no puedo serializar las aristas
-		GrafoLista temp=new GrafoLista();
-		Persona Persona = new Persona("muz", 2, "523432");
-		Persona Persona2 = new Persona("muiz", 2, "51432");
-		Persona Persona3 = new Persona("mz", 2, "5432");
+		GrafoLista temp = new GrafoLista();
+		Persona Persona = new Persona("Alan", 2, "Tech Lead");
+		Persona Persona2 = new Persona("Hernan", 2, "Dev Trainee");
+		Persona Persona3 = new Persona("Alejandro", 2, "out");
 		temp.agregarPersona(Persona3);
 		temp.agregarPersona(Persona2);
 		temp.agregarPersona(Persona);
 		temp.agregarArista(Persona2, Persona3);
-		ArrayList<Persona> casteo = (ArrayList<Persona>)temp.getPersonas();
-		GestorArchivos.generarJSON2("generado2.json",casteo);
-		
+		temp.agregarArista(Persona2, Persona);
+		assertTrue(gestor.generarJSON("generado.json", temp.getPersonas()));
+
 	}
-	
-	
 
 	@After
 	public void cleanUp() {
@@ -164,9 +157,11 @@ public class GestorArchivosTest {
 		gestor.borrarArchivo("archivojason");
 		gestor.borrarArchivo("archivojason.json");
 		gestor.borrarArchivo("jasonlista.json");
-		
+
 	}
+
 	@Ignore
-	public void testNull() {}
+	public void testNull() {
+	}
 
 }

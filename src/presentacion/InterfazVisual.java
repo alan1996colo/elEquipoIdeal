@@ -10,12 +10,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -350,9 +352,24 @@ public class InterfazVisual {
 	}
 
 	private void eventosMenu() {
-		cargarArchivoItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Se ha seleccionado 'Cargar Archivo'");
+		JFileChooser fc = new JFileChooser();
+		File initialDir = new File("src/fileManager/");
+		fc.setCurrentDirectory(initialDir); // Establecer directorio inicial
+		cargarArchivoItem.addActionListener(ev -> {
+			int returnVal = fc.showOpenDialog(frame);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				try {
+					// System.out.println(file.getPath());
+
+					// **codigo de capa de negocio para cambiar el grafoLista por el el
+					// archivoSeleccionado fname, usando gestorArchivos.
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("Operation is CANCELLED :(");
 			}
 		});
 
