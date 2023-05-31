@@ -28,22 +28,23 @@ public class Solver {
 	private Set<Persona> _actual;
 	
 	
-	private Solver(GrafoLista grafoLista) {
+	public Solver(GrafoLista grafoLista) {
 		_grafoLista=grafoLista;
 		
 	}
 	
-	public void Resolver(String rol){
+	public Set<Persona> Resolver(String rol){
 		_mejor = new HashSet<Persona>();
 		_actual = new HashSet<Persona>();
 		
 		buscarMejorDesde(0,rol);
+		return _mejor;
 	}
 	
 	private void buscarMejorDesde(int vertice,String rol) {
 		//CASO BASE 1
 		if(vertice == _grafoLista.getTamanio()) {
-			if(Auxiliares.sonCompatibles(_grafoLista, _actual)  &&   _grafoLista.getPersonaNum(vertice).get_rol()==rol  )  {
+			if(Auxiliares.sonCompatibles(_grafoLista, _actual)  &&   _grafoLista.getPersonaNum(vertice).get_rol()==rol && _actual.size()>_mejor.size() )  {
 				_mejor=clonar(_actual);		
 				return;
 			}

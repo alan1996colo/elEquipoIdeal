@@ -36,11 +36,7 @@ public class AuxiliaresTest {
 	
 	@Test
 	public void trianguloTest() {
-		GrafoLista grafo = new GrafoLista(personas());
-		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(1));
-		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(2));
-		grafo.agregarArista(grafo.getPersonaNum(1), grafo.getPersonaNum(2));
-		grafo.agregarArista(grafo.getPersonaNum(3), grafo.getPersonaNum(1));
+		GrafoLista grafo = trianguloConAntena();
 		
 		
 		Set<Persona> conjunto = new HashSet<Persona>();
@@ -51,10 +47,37 @@ public class AuxiliaresTest {
 		assertTrue(Auxiliares.sonCompatibles(grafo, conjunto));
 		
 	}
+
+	@Test
+	public void noTrianguloTest() {
+		GrafoLista grafo = trianguloConAntena();
+		
+		
+		Set<Persona> conjunto = new HashSet<Persona>();
+		conjunto.add(new Persona("Flores",1,"Tester"));
+		conjunto.add(new Persona("Gomez",3,"Lider"));
+		conjunto.add(new Persona("Borja",5,"Lider"));
+		
+		assertFalse(Auxiliares.sonCompatibles(grafo, conjunto));
+		
+	}
+	@Test
+	public void aristaTest() {
+		GrafoLista grafo = trianguloConAntena();
+		
+		
+		Set<Persona> conjunto = new HashSet<Persona>();
+		conjunto.add(new Persona("Flores",1,"Tester"));
+		conjunto.add(new Persona("Gomez",3,"Lider"));
+		
+		
+		assertTrue(Auxiliares.sonCompatibles(grafo, conjunto));
+		
+	}
 	
 
 	
-	public ArrayList<Persona> personas() {
+	private ArrayList<Persona> personas() {
 		ArrayList<Persona> personas = new ArrayList<Persona>();
 		personas.add(new Persona("Flores",1,"Tester"));
 		personas.add(new Persona("Gomez",3,"Lider"));
@@ -64,5 +87,13 @@ public class AuxiliaresTest {
 		
 		return personas;
 		
+	}
+	private GrafoLista trianguloConAntena() {
+		GrafoLista grafo = new GrafoLista(personas());
+		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(1));
+		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(2));
+		grafo.agregarArista(grafo.getPersonaNum(1), grafo.getPersonaNum(2));
+		grafo.agregarArista(grafo.getPersonaNum(3), grafo.getPersonaNum(1));
+		return grafo;
 	}
 }
