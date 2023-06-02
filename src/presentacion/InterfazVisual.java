@@ -9,20 +9,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,16 +33,11 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxRectangle;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.model.mxCell;
-
 
 import java.awt.Graphics;
-import java.awt.Image;
 
 public class InterfazVisual {
 
@@ -63,6 +56,8 @@ public class InterfazVisual {
 	private int tamanio = 2;
 	private JButton botonAgregarRequerimiento;
 	private String nombres[] = { "" };
+	private mxGraph graph;
+	private ArrayList<Object> contenedorDeVertices;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -104,21 +99,21 @@ public class InterfazVisual {
 		frame.setLayout(null);
 
 		crearPantallaPrincipal();
-		
+
 	}
 
 	public void crearPantallaPrincipal() {
 
 		pantallaPrincipal = new JPanel();
 		pantallaPrincipal.setLayout(null);
-		pantallaPrincipal.setBounds(0, 0, 300, 600);
-		//pantallaPrincipal.add(loadTextArea());
+		pantallaPrincipal.setBounds(0, 0, 800, 600);
+		// pantallaPrincipal.add(loadTextArea());
 
 		divNombre();
 		divRol();
 		divCalificacion();
 		crearBotonAgregarPersona();
-		primeraVersionDeUsoGraph();
+		insertarGrafo();
 
 		pantallaPrincipal.setVisible(true);
 
@@ -294,69 +289,61 @@ public class InterfazVisual {
 	}
 
 	// ~~~~~~~~~~~Funciones y eventos~~~~~~~~~~~~~~~
-	
-	public void primeraVersionDeUsoGraph() {
-	    // Crear un objeto mxGraph
-	    mxGraph graph = new mxGraph();
 
-	    // Obtener el objeto raíz del grafo
-	    Object parent = graph.getDefaultParent();
+	public void insertarGrafo() {
+		// creo un arraylist para los futuros vertices.
+		contenedorDeVertices = new ArrayList<>();
+		// Crear un objeto mxGraph
+		graph = new mxGraph();
+		// Obtener el objeto raíz del grafo
+		Object parent = graph.getDefaultParent();
 
-	    // Insertar vértices con iconos
-	    Object v1 = graph.insertVertex(parent, null, "", 100, 20, 40, 40, "shape=image;image=/data/lelouch.png");
-	    Object v2 = graph.insertVertex(parent, null, "", 100, 200, 40, 40,"shape=image;image=/data/icono1.jpg");
-	    Object v3 = graph.insertVertex(parent, null, "", 50, 300, 40, 40,"shape=image;image=/data/icono4.jpg");
+		if (this.negocio != null) {
+			int x = 0;
+			int y = 0;
+			for (String personaNombre : negocio.getNombres()) {
+				Object vertex = graph.insertVertex(parent, null, personaNombre, x, y, 40, 40,randomPicture());
+				x += 40;
+				y += 40;
+				contenedorDeVertices.add(vertex);
+			}
+			for (String personaNombre : negocio.getNombres()) {
+				// insertar aristas.
+				for (String compatible : negocio.getCompatiblesDe(personaNombre)) {
+					graph.insertEdge(parent, null, "", buscarEnContenedor(personaNombre),
+							buscarEnContenedor(compatible));
+				}
+			}
 
-	    // Insertar una arista entre los vértices
-	    graph.insertEdge(parent, null, "", v1, v2);
-	    graph.insertEdge(parent, null, "", v1, v3);
-	    
-	    // Crear un componente de visualización del grafo
-	    CustomGraphComponent graphComponent = new CustomGraphComponent(graph);
-	    graphComponent.setBounds(300, 20, 400, 500);
+		}
 
-	    // Agregar el componente de visualización al JFrame
-	    frame.getContentPane().add(graphComponent);
-	    frame.setVisible(true);
+		mxGraphComponent graphComponent = new mxGraphComponent(graph);
+		graphComponent.setBounds(300, 20, 500, 500);
+
+		pantallaPrincipal.add(graphComponent);
+		// Agregar el componente de visualización al JFrame
+
 	}
 
-	// Clase personalizada de mxGraphComponent para dibujar correctamente los iconos en los vértices
-	private class CustomGraphComponent extends mxGraphComponent {
-	    public CustomGraphComponent(mxGraph graph) {
-	        super(graph);
-	    }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-
-	        // Recorrer los vértices y dibujar los iconos en sus posiciones
-	        Object[] cells = ((mxGraph) graph).getChildVertices(graph.getDefaultParent());
-	        for (Object cell : cells) {
-	            if (graph.getModel().isVertex(cell)) {
-	                mxCellState state = graph.getView().getState(cell);
-	                if (state != null) {
-	                    mxRectangle bounds = state.getBoundingBox();
-
-	                    Object value = ((mxCell) cell).getValue();
-	                    if (value instanceof ImageIcon) {
-	                        ImageIcon icon = (ImageIcon) value;
-	                        Image image = icon.getImage();
-	                        int x = (int) bounds.getX();
-	                        int y = (int) bounds.getY();
-	                        int width = (int) bounds.getWidth();
-	                        int height = (int) bounds.getHeight();
-
-	                        g.drawImage(image, x, y, width, height, null);
-	                    }
-	                }
-	            }
-	        }
-	    }
+	/***
+	 * Busca el objeto por nombre en el contenedorDeVertices y devuelve el objeto.
+	 */
+	private Object buscarEnContenedor(String nombreBuscado) {
+		for (Object buscado : this.contenedorDeVertices) {
+			if (nombreBuscado.equals((String) graph.getModel().getValue(buscado))) {
+				return buscado;
+			}
+		}
+		return null;
 	}
 
-	
-	
+
+	private String randomPicture(){
+		Random random = new Random();
+		String []pathsDeImagenes=new String[]{"shape=image;image=/data/lelouch.png","shape=image;image=/data/icono4.jpg","shape=image;image=/data/icono1.jpg"};
+		
+		return pathsDeImagenes[random.nextInt(3)];
+	}
 
 	/* Intenta agregar a la persona al grafo de negocio **/
 	public void eventoBotonAgregar() {
@@ -366,6 +353,10 @@ public class InterfazVisual {
 				negocio.agregarPersona(tfName.getText(), (int) calificacionElegida.getSelectedItem(),
 						(String) rolElegido.getSelectedItem());
 				actualizarNombres();
+				pantallaPrincipal.removeAll();
+				pantallaPrincipal.setVisible(false);
+				crearPantallaPrincipal();
+				
 				System.out.println("Se ha presionado el boton agregar");
 			}
 		});
@@ -440,10 +431,9 @@ public class InterfazVisual {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
 				try {
-				
 
 					negocio.cambiarSesion(file.getName());
-					 System.out.println("Se ha seleccionado el archivo " + file.getName());
+					System.out.println("Se ha seleccionado el archivo " + file.getName());
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -469,9 +459,6 @@ public class InterfazVisual {
 				System.out.println("Selección de archivo cancelada");
 			}
 		});
-		
-		
-		
 
 		compatiblesMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -480,7 +467,8 @@ public class InterfazVisual {
 				divPersonasDisponibleOrigen();
 				divPersonasDisponibleDestinoEn();
 				crearBotonAgregarCompatibilidad();
-				pantallaPrincipal.add(loadTextArea());
+				//pantallaPrincipal.add(loadTextArea());
+				insertarGrafo();
 				pantallaPrincipal.revalidate();
 				pantallaPrincipal.repaint();
 				System.out.println("se ha cambiado de panel..");
@@ -504,7 +492,8 @@ public class InterfazVisual {
 				divPersonasDisponibleOrigen();
 				divPersonasDisponibleDestinoEn();
 
-				pantallaPrincipal.add(loadTextArea());
+				//pantallaPrincipal.add(loadTextArea());
+				insertarGrafo();
 				crearBotonAgregarIncompatibilidad();
 				pantallaPrincipal.setVisible(true);
 				System.out.println("se ha cambiado de panel.. a incompatibilidad");

@@ -73,5 +73,14 @@ public class NegocioTest {
 		negocio.cambiarSesion("test.json");//Este es un archivo recurrente que se usa desde distintos JunitTest.
 		System.out.println(negocio.getPersonas().getPersonas().toString());//como la salida es distinta a los valores ingresados, claramente el cambio 
 	}
+	@Test
+	public void getCompatiblesDeTest(){
+		negocio.agregarPersona("nicolas", 0, "null");
+		negocio.agregarPersona("vanesa", 0, "moza");
+		negocio.agregarCompatibilidad("nicolas", "vanesa");
+		assertEquals(negocio.getCompatiblesDe("nicolas").get(0),"vanesa");
+
+
+	}
 
 }

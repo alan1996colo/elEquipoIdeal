@@ -1,5 +1,7 @@
 package negocio;
 
+import java.util.ArrayList;
+
 import data.GestorArchivos;
 
 public class Negocio {
@@ -19,23 +21,21 @@ public class Negocio {
 		}
 
 	};
-	
-	
-	/**Reemplaza el grafo actual por el cargado desde el archivo y lo inicializa.**/
+
+	/**
+	 * Reemplaza el grafo actual por el cargado desde el archivo y lo inicializa.
+	 **/
 	public void cambiarSesion(String fname) {
-		GestorArchivos gestor=new GestorArchivos();
+		GestorArchivos gestor = new GestorArchivos();
 		this.personas.setPersonas(gestor.cargarJsonLista(fname));
 		this.personas.inicializarAristas();
-		
-		
-		
+
 	}
-	
+
 	public void guardarSesion(String fname) {
-		GestorArchivos gestor=new GestorArchivos();
+		GestorArchivos gestor = new GestorArchivos();
 		gestor.generarJSON(fname, this.personas.getPersonas());
 	}
-	
 
 	public GrafoLista getPersonas() {
 		return this.personas;
@@ -78,6 +78,39 @@ public class Negocio {
 
 		}
 		return ret;
+	}
+
+	/******
+	 * Busca la persona en el grafo por el nombre, cuando la encuentra devuelve un
+	 * arraylist de sus compatibles.
+	 * 
+	 * @param nombre
+	 * @return
+	 */
+	public ArrayList<String> getCompatiblesDe(String nombre) {
+
+		if (this.personas == null) {
+			throw new RuntimeException("No se puede buscar compatibles de un grafo vacio.");
+
+		} else {
+
+			for (Persona persona : this.personas.getPersonas()) {
+				if (persona.getApellido().equals(nombre)) {
+					if (persona.getCompatibles() != null) {
+						ArrayList<String> ret = new ArrayList<String>();
+						for (Arista ar : persona.getCompatibles()) {
+							ret.add(ar.getPersonaDestinoNombre());
+						}
+						return ret;
+					} else {
+						return null;
+					}
+				}
+
+			}
+			throw new RuntimeException("No existe tal persona el el grafo.");
+		}
+
 	}
 
 	public boolean agregarinCompatibilidad(String apellidoOrigen, String apellidoDestino) {

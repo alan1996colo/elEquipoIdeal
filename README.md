@@ -20,5 +20,8 @@ TASK TO DO:
 - [x] Agregar metodos para cargar las fotos.
 - [x] Finalizar los action listener de las pestañas cargar y guardar archivo.
 - [ ] Crear una nueva pestaña y boton para calcular la solucion.
+- [ ] crear una funcion en la interfazVisual que asigne posiciones libres de forma dinamica.
+- [ ] Crear una opcion para que el usuario voluntariamente pueda cargar una imagen propia
+
 
 

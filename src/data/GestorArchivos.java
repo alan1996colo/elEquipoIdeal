@@ -15,25 +15,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.w3c.dom.Element;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import negocio.Persona;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.FileWriter;
-import java.io.IOException;
-//import java.io.FileReader;
+import negocio.Persona;
 
 public class GestorArchivos implements Serializable {
 
@@ -173,8 +159,7 @@ public class GestorArchivos implements Serializable {
 
 		try {
 			FileWriter writer = new FileWriter(this.path + fname);
-			FileInputStream temp = new FileInputStream(this.path + fname);
-
+			
 			writer.write(json);
 			writer.close();
 
