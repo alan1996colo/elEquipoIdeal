@@ -9,16 +9,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -31,7 +35,16 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxRectangle;
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.view.mxCellState;
+import com.mxgraph.view.mxGraph;
+import com.mxgraph.model.mxCell;
+
+
 import java.awt.Graphics;
+import java.awt.Image;
 
 public class InterfazVisual {
 
@@ -91,19 +104,22 @@ public class InterfazVisual {
 		frame.setLayout(null);
 
 		crearPantallaPrincipal();
+		
 	}
 
 	public void crearPantallaPrincipal() {
 
 		pantallaPrincipal = new JPanel();
 		pantallaPrincipal.setLayout(null);
-		pantallaPrincipal.setBounds(0, 0, 800, 600);
-		pantallaPrincipal.add(loadTextArea());
+		pantallaPrincipal.setBounds(0, 0, 300, 600);
+		//pantallaPrincipal.add(loadTextArea());
 
 		divNombre();
 		divRol();
 		divCalificacion();
 		crearBotonAgregarPersona();
+		primeraVersionDeUsoGraph();
+
 		pantallaPrincipal.setVisible(true);
 
 		frame.getContentPane().add(pantallaPrincipal);
@@ -278,6 +294,69 @@ public class InterfazVisual {
 	}
 
 	// ~~~~~~~~~~~Funciones y eventos~~~~~~~~~~~~~~~
+	
+	public void primeraVersionDeUsoGraph() {
+	    // Crear un objeto mxGraph
+	    mxGraph graph = new mxGraph();
+
+	    // Obtener el objeto raíz del grafo
+	    Object parent = graph.getDefaultParent();
+
+	    // Insertar vértices con iconos
+	    Object v1 = graph.insertVertex(parent, null, "", 100, 20, 40, 40, "shape=image;image=/data/lelouch.png");
+	    Object v2 = graph.insertVertex(parent, null, "", 100, 200, 40, 40,"shape=image;image=/data/icono1.jpg");
+	    Object v3 = graph.insertVertex(parent, null, "", 50, 300, 40, 40,"shape=image;image=/data/icono4.jpg");
+
+	    // Insertar una arista entre los vértices
+	    graph.insertEdge(parent, null, "", v1, v2);
+	    graph.insertEdge(parent, null, "", v1, v3);
+	    
+	    // Crear un componente de visualización del grafo
+	    CustomGraphComponent graphComponent = new CustomGraphComponent(graph);
+	    graphComponent.setBounds(300, 20, 400, 500);
+
+	    // Agregar el componente de visualización al JFrame
+	    frame.getContentPane().add(graphComponent);
+	    frame.setVisible(true);
+	}
+
+	// Clase personalizada de mxGraphComponent para dibujar correctamente los iconos en los vértices
+	private class CustomGraphComponent extends mxGraphComponent {
+	    public CustomGraphComponent(mxGraph graph) {
+	        super(graph);
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+
+	        // Recorrer los vértices y dibujar los iconos en sus posiciones
+	        Object[] cells = ((mxGraph) graph).getChildVertices(graph.getDefaultParent());
+	        for (Object cell : cells) {
+	            if (graph.getModel().isVertex(cell)) {
+	                mxCellState state = graph.getView().getState(cell);
+	                if (state != null) {
+	                    mxRectangle bounds = state.getBoundingBox();
+
+	                    Object value = ((mxCell) cell).getValue();
+	                    if (value instanceof ImageIcon) {
+	                        ImageIcon icon = (ImageIcon) value;
+	                        Image image = icon.getImage();
+	                        int x = (int) bounds.getX();
+	                        int y = (int) bounds.getY();
+	                        int width = (int) bounds.getWidth();
+	                        int height = (int) bounds.getHeight();
+
+	                        g.drawImage(image, x, y, width, height, null);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	}
+
+	
+	
 
 	/* Intenta agregar a la persona al grafo de negocio **/
 	public void eventoBotonAgregar() {
