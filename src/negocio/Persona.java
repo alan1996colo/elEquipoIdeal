@@ -34,6 +34,7 @@ public class Persona implements Serializable {
 		if (this.compatibles.contains(new Arista(this, nodoDestino))) {
 			throw new IllegalArgumentException("La arista ya existe");
 		}
+		if(this.equals(nodoDestino)) {throw new IllegalArgumentException("No se permiten bucles");}
 		compatibles.add(new Arista(this, nodoDestino));
 
 	}
@@ -88,18 +89,7 @@ public class Persona implements Serializable {
 				return false;
 		} else if (!_apellido.equals(other._apellido))
 			return false;
-		if (_rol == null) {
-			if (other._rol != null)
-				return false;
-		} else if (!_rol.equals(other._rol))
-			return false;
-
-		if (_calificacion == 0) {
-			if (other._calificacion != 0)
-				return false;
-		} else if (_calificacion != other._calificacion) {
-			return false;
-		}
+		
 
 		return true;
 	}

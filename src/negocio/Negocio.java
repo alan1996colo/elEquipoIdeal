@@ -6,6 +6,7 @@ import data.GestorArchivos;
 
 public class Negocio {
 	GrafoLista personas;
+	Requerimiento req;
 
 	public Negocio() {
 		this.personas = new GrafoLista();
@@ -21,6 +22,22 @@ public class Negocio {
 		}
 
 	};
+
+	/**
+	 * carga los requerimientos, si existe algun valor negativo o la cantidad es
+	 * superior a los disponibles lanza excepciones
+	 ***/
+	public void cargarRequerimientos(int cantLiderProyecto, int cantArquitecto, int cantProgramador, int cantTester) {
+		if (cantLiderProyecto < 0 || cantArquitecto < 0 || cantProgramador < 0 || cantTester < 0) {
+			throw new IllegalArgumentException("No se puede solicitar una cantidad negativa de personas");
+		} else if (cantLiderProyecto + cantArquitecto + cantProgramador + cantTester > this.personas.getTamanio()) {
+
+			throw new IllegalArgumentException(
+					"La cantidad de personas requeridas es superior a la cantidad de personas disponibles.");
+		} else {
+			this.req = new Requerimiento(cantLiderProyecto, cantArquitecto, cantProgramador, cantTester);
+		}
+	}
 
 	/**
 	 * Reemplaza el grafo actual por el cargado desde el archivo y lo inicializa.

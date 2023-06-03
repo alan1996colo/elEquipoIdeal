@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -28,16 +30,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
 
-import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 public class InterfazVisual {
 
@@ -58,6 +62,8 @@ public class InterfazVisual {
 	private String nombres[] = { "" };
 	private mxGraph graph;
 	private ArrayList<Object> contenedorDeVertices;
+	private JTable table;
+	private JButton botonCalcular;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -107,17 +113,45 @@ public class InterfazVisual {
 		pantallaPrincipal = new JPanel();
 		pantallaPrincipal.setLayout(null);
 		pantallaPrincipal.setBounds(0, 0, 800, 600);
-		// pantallaPrincipal.add(loadTextArea());
-
 		divNombre();
 		divRol();
 		divCalificacion();
 		crearBotonAgregarPersona();
 		insertarGrafo();
+		agregarFondoDePantalla();
 
 		pantallaPrincipal.setVisible(true);
 
 		frame.getContentPane().add(pantallaPrincipal);
+
+	}
+
+	/*** Este metodo debe ser llamado d¿luego de agregar todos los componentes. **/
+	public void agregarFondoDePantalla() {
+		ImageIcon icon = new ImageIcon("src/data/UNGS.jpg");
+		ImageIcon iconEscalado = new ImageIcon(icon.getImage().getScaledInstance(800, 600, Image.SCALE_SMOOTH));
+		JLabel thumb = new JLabel();
+		thumb.setBounds(0, -60, 800, 600);
+		thumb.setIcon(iconEscalado);
+		pantallaPrincipal.add(thumb);
+		pantallaPrincipal.setComponentZOrder(thumb, pantallaPrincipal.getComponentCount() - 1);
+
+	}
+
+	public void divTablaRequerimientos() {
+		DefaultTableModel model = new DefaultTableModel();
+		table = new JTable(model);
+		model.addColumn("Líder de Proyecto");
+		model.addColumn("Arquitecto");
+		model.addColumn("Programador");
+		model.addColumn("Tester");
+		// dadas ciertas complicaciones de parseo mas adelante el el acttion listener,
+		// creo que lo mejor es inicializar la lista como strings en lugar de integers.
+		String cantidad[] = new String[] { "0", "0", "0", "0" };
+		model.addRow(cantidad);
+		JScrollPane scroll = new JScrollPane(table);
+		scroll.setBounds(300, 0, 500, 500);
+		pantallaPrincipal.add(scroll);
 
 	}
 
@@ -190,6 +224,7 @@ public class InterfazVisual {
 			}
 		};
 		tfName.setBounds(20, 10, 170, 30); // Establecer las coordenadas y dimensiones del JTextField dentro del JPanel
+
 		pantallaPrincipal.add(tfName);
 		eventoNombre();
 
@@ -198,11 +233,12 @@ public class InterfazVisual {
 	private void divRol() {
 		JPanel panel = new JPanel();
 
-		String[] roles = { "Rol", "Tester", "Programador", "Arquitecto", "Lider de proyexto" };
+		String[] roles = { "Tester", "Programador", "Arquitecto", "Lider de proyexto" };
 		rolElegido = new JComboBox<>(roles);
 		rolElegido.setToolTipText("Seleccione el Rol correspondiente a la persona.");
 		panel.add(rolElegido);
 		panel.setBounds(10, 70, 170, 31);
+		panel.setOpaque(false);
 		pantallaPrincipal.add(panel);
 	}
 
@@ -216,6 +252,7 @@ public class InterfazVisual {
 
 		panel.add(calificacionElegida);
 		panel.setBounds(120, 70, 170, 31);
+		panel.setOpaque(false);
 		pantallaPrincipal.add(panel);
 	}
 
@@ -225,6 +262,14 @@ public class InterfazVisual {
 		pantallaPrincipal.add(botonAgregarPersona);
 		eventoBotonAgregar();
 	}
+	
+	public void crearBotonCalcular() {
+		botonCalcular = new JButton("Calcular");
+		botonCalcular.setBounds(20, 200, 100, 100);
+		pantallaPrincipal.add(botonCalcular);
+		eventoBotonCalcular();
+	}
+	
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~ pantalla agregar in/compatibilidad origen-destino
 	// ~~~~~~~~~~~~~~ ~~~~~~~~~~
@@ -273,11 +318,12 @@ public class InterfazVisual {
 
 	// ---------------------------Pantalla solicitar
 	// requerimienttos--------------------------
-	public void crearSpinnerCantidad() {
+	public JSpinner crearSpinnerCantidad() {
 		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, tamanio, 1);
 		JSpinner spinner = new JSpinner(spinnerModel);
 		spinner.setBounds(180, 75, 40, 25);
-		pantallaPrincipal.add(spinner);
+
+		return spinner;
 	}
 
 	public void crearBotonAgregarRequerimiento() {
@@ -285,6 +331,7 @@ public class InterfazVisual {
 		botonAgregarRequerimiento.setLayout(null);
 		botonAgregarRequerimiento.setBounds(12, 150, 200, 20);
 		pantallaPrincipal.add(botonAgregarRequerimiento);
+		eventoBotonAgregarRequerimiento();
 
 	}
 
@@ -301,10 +348,27 @@ public class InterfazVisual {
 		if (this.negocio != null) {
 			int x = 0;
 			int y = 0;
+			boolean turno = true;
 			for (String personaNombre : negocio.getNombres()) {
-				Object vertex = graph.insertVertex(parent, null, personaNombre, x, y, 40, 40,randomPicture());
-				x += 40;
-				y += 40;
+				Object vertex = graph.insertVertex(parent, null, personaNombre, x, y, 40, 40, randomPicture());
+				if (turno) {
+					x += 40;
+
+					if (x > 490) {
+						turno = false;
+						x = 0;
+
+					}
+				}
+
+				if (!turno) {
+					y += 40;
+					if (y > 490) {
+						turno = true;
+						y = 0;
+					}
+				}
+
 				contenedorDeVertices.add(vertex);
 			}
 			for (String personaNombre : negocio.getNombres()) {
@@ -318,7 +382,7 @@ public class InterfazVisual {
 		}
 
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
-		graphComponent.setBounds(300, 20, 500, 500);
+		graphComponent.setBounds(300, 50, 490, 490);
 
 		pantallaPrincipal.add(graphComponent);
 		// Agregar el componente de visualización al JFrame
@@ -337,11 +401,11 @@ public class InterfazVisual {
 		return null;
 	}
 
-
-	private String randomPicture(){
+	private String randomPicture() {
 		Random random = new Random();
-		String []pathsDeImagenes=new String[]{"shape=image;image=/data/lelouch.png","shape=image;image=/data/icono4.jpg","shape=image;image=/data/icono1.jpg"};
-		
+		String[] pathsDeImagenes = new String[] { "shape=image;image=/data/lelouch.png",
+				"shape=image;image=/data/icono4.jpg", "shape=image;image=/data/icono1.jpg" };
+
 		return pathsDeImagenes[random.nextInt(3)];
 	}
 
@@ -356,8 +420,21 @@ public class InterfazVisual {
 				pantallaPrincipal.removeAll();
 				pantallaPrincipal.setVisible(false);
 				crearPantallaPrincipal();
-				
+
 				System.out.println("Se ha presionado el boton agregar");
+			}
+		});
+
+	}
+	
+	
+	public void eventoBotonCalcular() {
+		botonCalcular.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+			
+
+				System.out.println("Se ha presionado el boton CALCULAR");
 			}
 		});
 
@@ -375,16 +452,36 @@ public class InterfazVisual {
 		botonAgregarCompatibilidad.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+
 				for (int i = 0; i < personasDisponiblesDestino.length; i++) {
 					if (personasDisponiblesDestino[i].isSelected()) {
-						negocio.agregarCompatibilidad((String) personasDisponiblesOrigen.getSelectedItem(),
-								(String) personasDisponiblesDestino[i].getText());
-						System.out.println("Se ha presionado el boton agregar compatibilidad");
+						try {
+							if (negocio.agregarCompatibilidad((String) personasDisponiblesOrigen.getSelectedItem(),
+									(String) personasDisponiblesDestino[i].getText())) {
+								System.out.println("Se ha presionado el boton agregar compatibilidad");
+							} else {
+								JOptionPane.showMessageDialog(null,
+										"No se pudo agregar la compatibilidad, revise los datos ingresados");
+							}
 
+						} catch (IllegalArgumentException except) {
+							JOptionPane.showMessageDialog(null, except);
+						}
 					}
+
 				}
+				pantallaPrincipal.removeAll();
+
+				divPersonasDisponibleOrigen();
+				divPersonasDisponibleDestinoEn();
+				crearBotonAgregarCompatibilidad();
+				insertarGrafo();
+				agregarFondoDePantalla();
+				pantallaPrincipal.revalidate();
+				pantallaPrincipal.repaint();
 
 			}
+
 		});
 	}
 
@@ -398,6 +495,36 @@ public class InterfazVisual {
 						System.out.println("Se ha presionado el boton agregar incompatibilidad");
 
 					}
+				}
+
+			}
+		});
+	}
+
+	public void eventoBotonAgregarRequerimiento() {
+		botonAgregarRequerimiento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				/// OKAY, cuando no toco ningun valor el conenido de table.getValue es un Iteger
+				/// por defecto.
+				// si modifico algo, el contenido de table.getvalue es un object String.
+				// okay, cambie la lista inicial para que comience siendo strings.
+
+				// System.out.println(table.getValueAt(0,0).getClass());
+				try {
+					negocio.cargarRequerimientos(Integer.parseInt(table.getValueAt(0, 0).toString()),
+							Integer.parseInt(table.getValueAt(0, 1).toString()),
+							Integer.parseInt(table.getValueAt(0, 2).toString()),
+							Integer.parseInt(table.getValueAt(0, 3).toString()));
+
+					System.out.println("Se ha presionado el boton agregar requerimientos");
+				} catch (NumberFormatException excepcion) {
+					JOptionPane.showMessageDialog(null, "Solo se permiten numeros, no se permiten letras");
+
+				}
+				catch(IllegalArgumentException exc) {
+					JOptionPane.showMessageDialog(null, exc);
+					
 				}
 
 			}
@@ -441,6 +568,11 @@ public class InterfazVisual {
 			} else {
 				System.out.println("Operation is CANCELLED :(");
 			}
+
+			pantallaPrincipal.removeAll();
+			pantallaPrincipal.setVisible(false);
+			crearPantallaPrincipal();
+
 		});
 
 		guardarArchivoItem.addActionListener(ev -> {
@@ -467,8 +599,9 @@ public class InterfazVisual {
 				divPersonasDisponibleOrigen();
 				divPersonasDisponibleDestinoEn();
 				crearBotonAgregarCompatibilidad();
-				//pantallaPrincipal.add(loadTextArea());
+				// pantallaPrincipal.add(loadTextArea());
 				insertarGrafo();
+				agregarFondoDePantalla();
 				pantallaPrincipal.revalidate();
 				pantallaPrincipal.repaint();
 				System.out.println("se ha cambiado de panel..");
@@ -489,12 +622,16 @@ public class InterfazVisual {
 			public void actionPerformed(ActionEvent e) {
 				pantallaPrincipal.removeAll();
 				pantallaPrincipal.setVisible(false);
+				JOptionPane.showMessageDialog(null,
+						"Lo sentimos, debido a un recorte de personal \n no su pudo completar esta funcionalidad");
+
 				divPersonasDisponibleOrigen();
 				divPersonasDisponibleDestinoEn();
 
-				//pantallaPrincipal.add(loadTextArea());
+				// pantallaPrincipal.add(loadTextArea());
 				insertarGrafo();
 				crearBotonAgregarIncompatibilidad();
+				agregarFondoDePantalla();
 				pantallaPrincipal.setVisible(true);
 				System.out.println("se ha cambiado de panel.. a incompatibilidad");
 			}
@@ -508,9 +645,12 @@ public class InterfazVisual {
 					actualizarTamanio();
 					pantallaPrincipal.removeAll();
 					pantallaPrincipal.setVisible(false);
+					crearBotonCalcular();
+					insertarGrafo();
+
 					crearBotonAgregarRequerimiento();
-					crearSpinnerCantidad();
-					divRol();
+					divTablaRequerimientos();
+					agregarFondoDePantalla();
 
 					pantallaPrincipal.setVisible(true);
 
