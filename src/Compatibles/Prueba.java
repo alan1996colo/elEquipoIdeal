@@ -23,9 +23,9 @@ public class Prueba {
 	private static GrafoLista trianguloConAntena() {
 		GrafoLista grafo = new GrafoLista(personas());
 		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(1));
-//		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(2));
-//		grafo.agregarArista(grafo.getPersonaNum(1), grafo.getPersonaNum(2));
-//		grafo.agregarArista(grafo.getPersonaNum(3), grafo.getPersonaNum(1));
+		grafo.agregarArista(grafo.getPersonaNum(0), grafo.getPersonaNum(2));
+		grafo.agregarArista(grafo.getPersonaNum(1), grafo.getPersonaNum(2));
+		
 		return grafo;
 	}
 	public static ArrayList<Persona> personas() {
@@ -43,7 +43,7 @@ public class Prueba {
 	public static void main(String[] args) {
 		
  			Solver solver = new Solver(trianguloConAntena());
-			Set<Persona>mejor=solver.Resolver("Lider");   // verifico que me arroja el codigo de busqueda
+			Set<Persona>mejor=solver.Resolver();   // verifico que me arroja el codigo de busqueda
 			//ArrayList<Persona>esperado=esperados();
 			
 			System.out.println(mejor);

@@ -22,7 +22,7 @@ public class AuxiliaresTest {
 		conjunto.add(new Persona("Gomez",3,"Lider"));
 		conjunto.add(new Persona("Perez",4,"Lider"));
 		
-		assertFalse(Auxiliares.sonCompatibles(grafo, conjunto));
+		assertFalse(Auxiliares.sonCompatibles( conjunto));
 		
 	}
 	@Test
@@ -30,7 +30,7 @@ public class AuxiliaresTest {
 		GrafoLista grafo = new GrafoLista(personas());
 		
 		Set<Persona> conjunto = new HashSet<Persona>();
-		assertTrue(Auxiliares.sonCompatibles(grafo, conjunto));
+		assertTrue(Auxiliares.sonCompatibles( conjunto));
 		
 	}
 	
@@ -44,7 +44,7 @@ public class AuxiliaresTest {
 		conjunto.add(new Persona("Gomez",3,"Lider"));
 		conjunto.add(new Persona("Perez",4,"Lider"));
 		
-		assertTrue(Auxiliares.sonCompatibles(grafo, conjunto));
+		assertTrue(Auxiliares.sonCompatibles( conjunto));
 		
 	}
 
@@ -58,7 +58,7 @@ public class AuxiliaresTest {
 		conjunto.add(new Persona("Gomez",3,"Lider"));
 		conjunto.add(new Persona("Borja",5,"Lider"));
 		
-		assertFalse(Auxiliares.sonCompatibles(grafo, conjunto));
+		assertFalse(Auxiliares.sonCompatibles( conjunto));
 		
 	}
 	@Test
@@ -71,7 +71,7 @@ public class AuxiliaresTest {
 		conjunto.add(new Persona("Gomez",3,"Lider"));
 		
 		
-		assertTrue(Auxiliares.sonCompatibles(grafo, conjunto));
+		assertTrue(Auxiliares.sonCompatibles( conjunto));
 		
 	}
 	

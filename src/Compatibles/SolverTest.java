@@ -15,7 +15,7 @@ public class SolverTest {
 	@Test
 	public void SonCompatiblesTest() {
 		Solver solver = new Solver(trianguloConAntena());
-		Set<Persona>mejor=solver.Resolver("Lider");
+		Set<Persona>mejor=solver.Resolver();
 		
 //		Persona[]esperado= {personas[1]};
 //		Assert.iguales(esperado, mejor);

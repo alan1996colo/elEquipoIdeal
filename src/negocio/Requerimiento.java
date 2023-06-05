@@ -1,7 +1,39 @@
 package negocio;
 
 public class Requerimiento {
-    int cantLiderProyecto;
+    public int getCantLiderProyecto() {
+		return cantLiderProyecto;
+	}
+
+	public void setCantLiderProyecto(int cantLiderProyecto) {
+		this.cantLiderProyecto = cantLiderProyecto;
+	}
+
+	public int getCantArquitecto() {
+		return cantArquitecto;
+	}
+
+	public void setCantArquitecto(int cantArquitecto) {
+		this.cantArquitecto = cantArquitecto;
+	}
+
+	public int getCantProgramador() {
+		return cantProgramador;
+	}
+
+	public void setCantProgramador(int cantProgramador) {
+		this.cantProgramador = cantProgramador;
+	}
+
+	public int getCantTester() {
+		return cantTester;
+	}
+
+	public void setCantTester(int cantTester) {
+		this.cantTester = cantTester;
+	}
+
+	int cantLiderProyecto;
     int cantArquitecto;
     int cantProgramador;
     int cantTester;
