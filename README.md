@@ -24,5 +24,9 @@ TASK TO DO:
 - [ ] crear una funcion en la interfazVisual que asigne posiciones libres de forma dinamica.
 - [ ] Crear una opcion para que el usuario voluntariamente pueda cargar una imagen propia
 
+- [ ] Revisar el codigo de la clase clique, y generar codigo que genere un ArrayList de cliques.  (bestialidad)
+- [x] Hacer un codigo que al pasarle una lista de personas() diga si esa lista es o no es clique nuestro GrafoReal.
+- 
+
 
 
