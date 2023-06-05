@@ -31,9 +31,10 @@ public class Prueba {
 	public static ArrayList<Persona> personas() {
 		ArrayList<Persona> personas = new ArrayList<Persona>();
 		personas.add(new Persona("Flores",5,"Lider"));
-		personas.add(new Persona("Gomez",4,"Lider"));
-//		personas.add(new Persona("Perez",4,"Lider"));
-//		personas.add(new Persona("Borja",5,"Tester"));
+		personas.add(new Persona("Gomez",1,"Lider"));
+		personas.add(new Persona("Perez",3,"Lider"));		
+		personas.add(new Persona("lezama",2,"Lider"));
+		//personas.add(new Persona("Borja",1,"Tester"));
 
 		return personas;
 		

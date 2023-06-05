@@ -43,8 +43,10 @@ public class Solver {
 	
 	private void buscarMejorDesde(int vertice,String rol) {
 		//CASO BASE 1
-		if(vertice == _grafoLista.getTamanio()) {
-			if(Auxiliares.sonCompatibles(_grafoLista, _actual)  &&   _grafoLista.getPersonaNum(vertice).get_rol()==rol && _actual.size()>_mejor.size() )  {
+		if(vertice == _grafoLista.getTamanio()-1) {//aca esta el error. estas pidiendo un out of bounds
+			if(Auxiliares.sonCompatibles(_grafoLista, _actual)  && 
+					_grafoLista.getPersonaNum(vertice).get_rol().equals(rol) 
+					&& _actual.size()>_mejor.size() )  {
 				_mejor=clonar(_actual);		
 				return;
 			}
@@ -55,11 +57,12 @@ public class Solver {
 			return;
 		
 		// CASO RECURSIVO
+		if(vertice<_grafoLista.getTamanio()) {
 		_actual.add(_grafoLista.getPersonaNum(vertice));
 		buscarMejorDesde(vertice+1,rol);
 		
 		_actual.remove(_grafoLista.getPersonaNum(vertice));
-		buscarMejorDesde(vertice+1,rol);
+		buscarMejorDesde(vertice+1,rol);}
 
 	}
 
