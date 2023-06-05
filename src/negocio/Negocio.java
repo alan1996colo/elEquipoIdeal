@@ -2,6 +2,7 @@ package negocio;
 
 import java.util.ArrayList;
 
+import Compatibles.Solver;
 import data.GestorArchivos;
 
 public class Negocio {
@@ -37,6 +38,13 @@ public class Negocio {
 		} else {
 			this.req = new Requerimiento(cantLiderProyecto, cantArquitecto, cantProgramador, cantTester);
 		}
+	}
+
+	/** Calcula el equipo ideal del enunciado del tp **/
+	public String calcularEquipoIdeal() {
+		Solver solver = new Solver(this.personas);
+		System.out.println(solver.calcular(this.req).size());
+		return solver.calcular(this.req).toString();
 	}
 
 	/**

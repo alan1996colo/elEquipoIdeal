@@ -80,7 +80,7 @@ public class GrafoLista implements Serializable {
 	}
 
 	public void mostrarGrafo() { // NO SE USA
-		
+
 		for (Persona iter : this.Personas) {
 			System.out.println(iter.toString());
 		}

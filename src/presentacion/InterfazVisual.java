@@ -141,7 +141,7 @@ public class InterfazVisual {
 	public void divTablaRequerimientos() {
 		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
-		model.addColumn("Líder de Proyecto");
+		model.addColumn("Lider");
 		model.addColumn("Arquitecto");
 		model.addColumn("Programador");
 		model.addColumn("Tester");
@@ -432,8 +432,10 @@ public class InterfazVisual {
 		botonCalcular.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-			
-
+				
+				String resultado=negocio.calcularEquipoIdeal();
+				JOptionPane.showMessageDialog(null, resultado);
+				JOptionPane.showMessageDialog(null, resultado, "EL equipo ideal es: ", JOptionPane.INFORMATION_MESSAGE);
 				System.out.println("Se ha presionado el boton CALCULAR");
 			}
 		});

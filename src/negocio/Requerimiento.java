@@ -1,7 +1,7 @@
 package negocio;
 
 public class Requerimiento {
-    public int getCantLiderProyecto() {
+	public int getCantLiderProyecto() {
 		return cantLiderProyecto;
 	}
 
@@ -34,26 +34,24 @@ public class Requerimiento {
 	}
 
 	int cantLiderProyecto;
-    int cantArquitecto;
-    int cantProgramador;
-    int cantTester;
+	int cantArquitecto;
+	int cantProgramador;
+	int cantTester;
 
-    public Requerimiento(int cantLiderProyecto,
-            int cantArquitecto,
-            int cantProgramador,
-            int cantTester) {
+	/** cantidad de :lider , arquitecto , programador, tester **/
+	public Requerimiento(int cantLiderProyecto, int cantArquitecto, int cantProgramador, int cantTester) {
 
-        this.cantArquitecto = cantArquitecto;
-        this.cantLiderProyecto = cantLiderProyecto;
-        this.cantProgramador = cantProgramador;
-        this.cantTester = cantTester;
-    }
+		this.cantArquitecto = cantArquitecto;
+		this.cantLiderProyecto = cantLiderProyecto;
+		this.cantProgramador = cantProgramador;
+		this.cantTester = cantTester;
+	}
 
-    public boolean cumpleRequerimientos(int cantLiderProyecto, int cantArquitecto, int cantProgramador,
-            int cantTester) {
+	public boolean cumpleRequerimientos(int cantLiderProyecto, int cantArquitecto, int cantProgramador,
+			int cantTester) {
 
-        return this.cantArquitecto == cantArquitecto && this.cantLiderProyecto == cantLiderProyecto
-                && this.cantProgramador == cantProgramador && this.cantTester == cantTester;
-    }
+		return (this.cantArquitecto == cantArquitecto && this.cantLiderProyecto == cantLiderProyecto
+				&& this.cantProgramador == cantProgramador && this.cantTester == cantTester);
+	}
 
 }
