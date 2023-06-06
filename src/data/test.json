@@ -1,0 +1,49 @@
+[
+  {
+    "_apellido": "martin",
+    "_calificacion": 1,
+    "_rol": "Tester",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "martin",
+        "personaDestinoNombre": "jose"
+      },
+      {
+        "personaOrigenNombre": "martin",
+        "personaDestinoNombre": "nacho"
+      }
+    ]
+  },
+  {
+    "_apellido": "jose",
+    "_calificacion": 1,
+    "_rol": "Programador",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "jose",
+        "personaDestinoNombre": "nacho"
+      }
+    ]
+  },
+  {
+    "_apellido": "nacho",
+    "_calificacion": 1,
+    "_rol": "Arquitecto",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "nacho",
+        "personaDestinoNombre": "jose"
+      },
+      {
+        "personaOrigenNombre": "nacho",
+        "personaDestinoNombre": "martin"
+      }
+    ]
+  },
+  {
+    "_apellido": "s",
+    "_calificacion": 1,
+    "_rol": "Tester",
+    "compatibles": []
+  }
+]

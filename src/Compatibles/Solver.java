@@ -41,7 +41,7 @@ public class Solver {
 	 * Algoritmo principal
 	 * 
 	 * Dado una lista de vertices, recorrera todos los vertices aplicando un primer
-	 * filtrado a los que contengan un conjunto que cumpla requerimientos.
+	 * filtrado a los que contengan un conjunto que supere requerimientos.
 	 * 
 	 * Luego tomara esos conjuntos y creara en cada conjunto todos los subcontontos
 	 * posibles, y aplicara otro filtrado quedandose solo con los que cumplan los
@@ -57,44 +57,42 @@ public class Solver {
 		ArrayList<HashSet<Persona>> primerFiltroCumplenRequerimientos = new ArrayList<>();
 		// recorro todos los vertices y me quedo con los set que cumplenrequerimientos.
 		for (Persona iter : grafo.getPersonas()) {
-
-			if (conjuntoCumpleRequerimientos(transformarPersonaToSet(iter), req)) {
+			
+			if (conjuntoSuperaRequerimientos(transformarPersonaToSet(iter), req)) {
 				primerFiltroCumplenRequerimientos.add(transformarPersonaToSet(iter));
 			}
 		}
 		// A esta altura ya me quede solo con los sets que cumplen requerimientos, pero
 		// debo crear todos los subconjuntos posibles para hacerle otra
 		// vez el mismo filtro.
+		//en mejorCandidato guardo el set con candidatos mejores calificados.
 
 		HashSet<Persona> mejorCandidato = new HashSet<Persona>();
 		// recorro la lista del primer filtro y solicito todos los subconjuntos posibles
-		// del conjunto en el que estoy parado
-		// luego agrego a la lista de candidatos los subconjuntos que cumplan
-		// requerimiento y todos sean compatibles con todos.
 
 		for (int i = 0; i < primerFiltroCumplenRequerimientos.size(); i++) {
 			ArrayList<HashSet<Persona>> todosLosSubConjuntosPosibles = obtenerTodosLosSubConjuntosPosibles(
 					primerFiltroCumplenRequerimientos.get(i));
+			//una vez que tengo todos los subconjuntos posibles en una lista, recorro la lista y actualizo el valor del mejor candidato
+			//al subconjunto que cumpla los requisitos estrictos, sean todos compatibles entre si sea mejor calificado que el candidato anterior.
+			
+			
 			for (int j = 0; j < todosLosSubConjuntosPosibles.size(); j++) {
+				
 				if (conjuntoCumpleRequerimientos(todosLosSubConjuntosPosibles.get(j), req)
-						&& Auxiliares.sonCompatibles(todosLosSubConjuntosPosibles.get(j))) {
-
-					if (esMejorCalificadoQueElSet(todosLosSubConjuntosPosibles.get(j), mejorCandidato)) {
-						mejorCandidato = todosLosSubConjuntosPosibles.get(j);
-						// voy dejando el mejor candidato, el mas calificado.
-					}
+						&& Auxiliares.sonCompatibles(todosLosSubConjuntosPosibles.get(j))
+						&& esMejorCalificadoQueElSet(todosLosSubConjuntosPosibles.get(j), mejorCandidato)
+						) {
+					
+					mejorCandidato = new HashSet<>(todosLosSubConjuntosPosibles.get(j));
+					// voy dejando el mejor candidato, el mas calificado.
 				}
-
+				
 			}
+			//debo repetir el procedimiento con los demas conjuntos en la lista del primer filtrado para garantizar tener al conjunto o subconjunto mejor calificado.
+			
 
 		}
-
-		// A esta altura en el array de candidatos solo tengo conjuntos que cumplen
-		// requerimientos y son todos compatibles con todos
-		// solo quedaria buscar el mejor y devolverlo.
-		// me acabo de dar cuenta que no hace falta una lista de candidatos sino un set,
-		// candidatos y irlo remplazando cada vez
-		// que encuentre un set mejor
 
 		return mejorCandidato;
 	}
@@ -143,18 +141,52 @@ public class Solver {
 		// contamos las personas compatibles a la que estamos parado.
 		for (Persona p : conjunto) {
 			String rol = p.get_rol();
+			
 
 			if ("Lider".equals(rol)) {
-				countLiderDeProyecto++;
+				countLiderDeProyecto=countLiderDeProyecto+1;
 			} else if ("Arquitecto".equals(rol)) {
-				countArquitecto++;
+				countArquitecto=countArquitecto+1;
 			} else if ("Programador".equals(rol)) {
-				countProgramador++;
+				countProgramador=countProgramador+1;
 			} else if ("Tester".equals(rol)) {
-				countTester++;
+				countTester=countTester+1;
 			}
+			
 		}
 		return req.cumpleRequerimientos(countLiderDeProyecto, countArquitecto, countProgramador, countTester);
+
+	}
+	
+	
+	
+	/**
+	 * Si el vertice ingresada es un set que supera los requerimientos solicitados,
+	 * TRUE, sino false.
+	 **/
+	public boolean conjuntoSuperaRequerimientos(Set<Persona> conjunto, Requerimiento req) {
+		int countLiderDeProyecto = 0;
+		int countArquitecto = 0;
+		int countProgramador = 0;
+		int countTester = 0;
+
+		// contamos las personas compatibles a la que estamos parado.
+		for (Persona p : conjunto) {
+			String rol = p.get_rol();
+			
+
+			if ("Lider".equals(rol)) {
+				countLiderDeProyecto=countLiderDeProyecto+1;
+			} else if ("Arquitecto".equals(rol)) {
+				countArquitecto=countArquitecto+1;
+			} else if ("Programador".equals(rol)) {
+				countProgramador=countProgramador+1;
+			} else if ("Tester".equals(rol)) {
+				countTester=countTester+1;
+			}
+			
+		}
+		return req.superaRequerimientos(countLiderDeProyecto, countArquitecto, countProgramador, countTester);
 
 	}
 
@@ -184,7 +216,7 @@ public class Solver {
 
 	}
 
-	/** Devuelve el clique maximo del rol ingresado. **/
+	/** Devuelve el clique maximo del rol ingresado.---NO SE USA **/
 	public Set<Persona> Resolver() {
 		_mejor = new HashSet<Persona>();
 		_actual = new HashSet<Persona>();

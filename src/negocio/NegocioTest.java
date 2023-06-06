@@ -37,7 +37,7 @@ public class NegocioTest {
 		Persona p2 = new Persona("Alejandro", 3, "Tester");
 
 		Arista ar = new Arista(p1, p2);
-		//System.out.println(negocio.getPersonas().getPersonas().get(0).getCompatibles().toString());
+		// System.out.println(negocio.getPersonas().getPersonas().get(0).getCompatibles().toString());
 		assertTrue(negocio.getPersonas().getPersonas().get(0).getCompatibles().contains(ar));
 		// resuelto, no estaba implementado ni el equals de persona ni el de arista.
 		// Ahora esto esta solucionado
@@ -66,25 +66,30 @@ public class NegocioTest {
 		Arista a2 = new Arista(new Persona("alan", 0, "Tester"), new Persona("asd", 0, "Tester"));
 		assertTrue(a1.equals(a2));
 	}
-	@Test@Ignore
+
+	@Test
+	@Ignore
 	public void cambiarSesionTest() {
 		negocio.agregarPersona("nicolas", 0, "Tester");
 		negocio.agregarPersona("vanesa", 0, "Tester");
 		negocio.agregarCompatibilidad("nicolas", "vanesa");
-		negocio.cambiarSesion("test.json");//Este es un archivo recurrente que se usa desde distintos JunitTest.
-		System.out.println(negocio.getPersonas().getPersonas().toString());//como la salida es distinta a los valores ingresados, claramente el cambio 
+		negocio.cambiarSesion("test.json");// Este es un archivo recurrente que se usa desde distintos JunitTest.
+		System.out.println(negocio.getPersonas().getPersonas().toString());// como la salida es distinta a los valores
+																			// ingresados, claramente el cambio
 	}
+
 	@Test
-	public void getCompatiblesDeTest(){
+	public void getCompatiblesDeTest() {
 		negocio.agregarPersona("nicolas", 0, "Tester");
 		negocio.agregarPersona("vanesa", 0, "Tester");
 		negocio.agregarCompatibilidad("nicolas", "vanesa");
-		assertEquals(negocio.getCompatiblesDe("nicolas").get(0),"vanesa");
-
+		assertEquals(negocio.getCompatiblesDe("nicolas").get(0), "vanesa");
 
 	}
+
 	@Test
-	public void calcularEquipoIdealTest() {
+	@Ignore
+	public void calcularEquipoIdealTestSimple() {
 		negocio.agregarPersona("nicolas", 1, "Tester");
 		negocio.agregarPersona("Alberto", 2, "Arquitecto");
 		negocio.agregarPersona("Gerardo", 3, "Programador");
@@ -93,45 +98,47 @@ public class NegocioTest {
 		negocio.agregarCompatibilidad("nicolas", "Alberto");
 		negocio.agregarCompatibilidad("nicolas", "Gerardo");
 		negocio.agregarCompatibilidad("nicolas", "Gabriel");
-		negocio.agregarCompatibilidad("nicolas", "Jose");
+		negocio.agregarCompatibilidad("Gerardo", "Jose");
+		negocio.agregarCompatibilidad("Alberto", "Jose");
 		negocio.agregarCompatibilidad("Gerardo", "Alberto");
-		
-		negocio.cargarRequerimientos(0, 1, 1 ,1);
-		//nicolas, gerardo, alberto
+
+		negocio.cargarRequerimientos(0, 1, 1, 1);
+		// jose, gerardo, alberto
 		System.out.println(negocio.calcularEquipoIdeal());
 	}
-	public void calcularEquipoIdealTest2() {
+
+	@Test
+	public void calcularEquipoIdealTestTodosConTodos() {
 		negocio.agregarPersona("nicolas", 1, "Tester");
 		negocio.agregarPersona("Alberto", 2, "Arquitecto");
 		negocio.agregarPersona("Gerardo", 3, "Programador");
 		negocio.agregarPersona("Gabriel", 4, "Lider");
 		negocio.agregarPersona("Jose", 5, "Tester");
-		negocio.agregarPersona("juan", 4, "Lider");
-		
+		negocio.agregarPersona("juan", 5, "Lider");
+
 		negocio.agregarCompatibilidad("nicolas", "Alberto");
 		negocio.agregarCompatibilidad("nicolas", "Gerardo");
 		negocio.agregarCompatibilidad("nicolas", "Gabriel");
 		negocio.agregarCompatibilidad("nicolas", "Jose");
 		negocio.agregarCompatibilidad("nicolas", "juan");
-		
+
 		negocio.agregarCompatibilidad("Alberto", "Gerardo");
 		negocio.agregarCompatibilidad("Alberto", "Gabriel");
 		negocio.agregarCompatibilidad("Alberto", "Jose");
 		negocio.agregarCompatibilidad("Alberto", "juan");
-		
+
 		negocio.agregarCompatibilidad("Gerardo", "Gabriel");
-		negocio.agregarCompatibilidad("Gerardo", "jose");
+		negocio.agregarCompatibilidad("Gerardo", "Jose");
 		negocio.agregarCompatibilidad("Gerardo", "juan");
-		
-		negocio.agregarCompatibilidad("Gabriel", "jose");
+
+		negocio.agregarCompatibilidad("Gabriel", "Jose");
 		negocio.agregarCompatibilidad("Gabriel", "juan");
-		
+
 		negocio.agregarCompatibilidad("Jose", "juan");
-		negocio.cargarRequerimientos(1, 1, 1 ,1);
-		//nicolas, gerardo, alberto
+		negocio.cargarRequerimientos(1, 1, 1, 1);
+		// nicolas, gerardo, alberto
 		System.out.println(negocio.calcularEquipoIdeal());
-		
-		
+
 	}
 
 }

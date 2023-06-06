@@ -43,7 +43,7 @@ public class Negocio {
 	/** Calcula el equipo ideal del enunciado del tp **/
 	public String calcularEquipoIdeal() {
 		Solver solver = new Solver(this.personas);
-		System.out.println(solver.calcular(this.req).size());
+
 		return solver.calcular(this.req).toString();
 	}
 
@@ -88,8 +88,9 @@ public class Negocio {
 				return true;
 			}
 		}
+		throw new IllegalArgumentException(
+				"NO se pudo agregar la compatibilidad , revise si los parametros ingresados son correctos");
 
-		return false;
 	}
 
 	/** Retorna todos los nombres ingresados */

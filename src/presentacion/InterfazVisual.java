@@ -262,14 +262,13 @@ public class InterfazVisual {
 		pantallaPrincipal.add(botonAgregarPersona);
 		eventoBotonAgregar();
 	}
-	
+
 	public void crearBotonCalcular() {
 		botonCalcular = new JButton("Calcular");
 		botonCalcular.setBounds(20, 200, 100, 100);
 		pantallaPrincipal.add(botonCalcular);
 		eventoBotonCalcular();
 	}
-	
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~ pantalla agregar in/compatibilidad origen-destino
 	// ~~~~~~~~~~~~~~ ~~~~~~~~~~
@@ -426,15 +425,13 @@ public class InterfazVisual {
 		});
 
 	}
-	
-	
+
 	public void eventoBotonCalcular() {
 		botonCalcular.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
-				String resultado=negocio.calcularEquipoIdeal();
-				JOptionPane.showMessageDialog(null, resultado);
+
+				String resultado = negocio.calcularEquipoIdeal();
 				JOptionPane.showMessageDialog(null, resultado, "EL equipo ideal es: ", JOptionPane.INFORMATION_MESSAGE);
 				System.out.println("Se ha presionado el boton CALCULAR");
 			}
@@ -523,10 +520,9 @@ public class InterfazVisual {
 				} catch (NumberFormatException excepcion) {
 					JOptionPane.showMessageDialog(null, "Solo se permiten numeros, no se permiten letras");
 
-				}
-				catch(IllegalArgumentException exc) {
+				} catch (IllegalArgumentException exc) {
 					JOptionPane.showMessageDialog(null, exc);
-					
+
 				}
 
 			}

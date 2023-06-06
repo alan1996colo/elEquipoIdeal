@@ -53,5 +53,15 @@ public class Requerimiento {
 		return (this.cantArquitecto == cantArquitecto && this.cantLiderProyecto == cantLiderProyecto
 				&& this.cantProgramador == cantProgramador && this.cantTester == cantTester);
 	}
+	
+	
+	public boolean superaRequerimientos(int cantLiderProyecto, int cantArquitecto, int cantProgramador,
+			int cantTester) {return (this.cantArquitecto <= cantArquitecto && this.cantLiderProyecto <= cantLiderProyecto
+			&& this.cantProgramador <= cantProgramador && this.cantTester <= cantTester);
+		
+	}
+	public String toString() {
+		return "("+this.cantLiderProyecto+" "+this.cantArquitecto+" "+this.cantProgramador+" "+this.cantTester+")";
+	}
 
 }
