@@ -233,7 +233,7 @@ public class InterfazVisual {
 	private void divRol() {
 		JPanel panel = new JPanel();
 
-		String[] roles = { "Tester", "Programador", "Arquitecto", "Lider de proyexto" };
+		String[] roles = { "Tester", "Programador", "Arquitecto", "Lider" };
 		rolElegido = new JComboBox<>(roles);
 		rolElegido.setToolTipText("Seleccione el Rol correspondiente a la persona.");
 		panel.add(rolElegido);

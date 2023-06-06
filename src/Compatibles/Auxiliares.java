@@ -3,11 +3,10 @@ package Compatibles;
 import java.util.Set;
 
 import negocio.Arista;
-import negocio.GrafoLista;
 import negocio.Persona;
 
 public class Auxiliares {
-	/**Revisa entre un grafo y el conjunto
+	/**Revisa si todas las personas del conjunto son compatibles.
 	 * */
 	public static boolean sonCompatibles(Set<Persona> conjunto) {
 		for(Persona i: conjunto)
