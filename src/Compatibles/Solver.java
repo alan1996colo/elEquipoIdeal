@@ -2,6 +2,7 @@ package Compatibles;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import negocio.Arista;
@@ -9,15 +10,18 @@ import negocio.GrafoLista;
 import negocio.Persona;
 import negocio.Requerimiento;
 
-public class Solver {
+public class Solver implements Runnable {
 	private GrafoLista grafo;
-	private Set<Persona> _mejor;
+	private HashSet<Persona> _mejor;
+	private Requerimiento _req;
+	private Set<Persona> _actual;
+	private Object bloqueo;
 
 	public Set<Persona> get_mejor() {
 		return _mejor;
 	}
 
-	public void set_mejor(Set<Persona> _mejor) {
+	public void set_mejor(HashSet<Persona> _mejor) {
 		this._mejor = _mejor;
 	}
 
@@ -29,11 +33,23 @@ public class Solver {
 		this._actual = _actual;
 	}
 
-	private Set<Persona> _actual;
-
-	/** Recibe como entrada un grafo */
-	public Solver(GrafoLista grafoLista) {
+	/**
+	 * Constructor con hilos, Recibe como entrada un grafo, los requerimientos,el
+	 * mejor conjunto conocido, y un objeto de bloqueo para manejar concurrencia de
+	 * los hilos
+	 */
+	public Solver(GrafoLista grafoLista, Requerimiento req, HashSet<Persona> mejor, Object bloqueo) {
 		grafo = grafoLista;
+		_req = req;
+		this._mejor = mejor;
+		this.bloqueo = bloqueo;
+
+	}
+
+	/** Constructor sin hilos, recibe como entrada un grafo y requerimiento **/
+	public Solver(GrafoLista grafoLista, Requerimiento req) {
+		grafo = grafoLista;
+		_req = req;
 
 	}
 
@@ -54,29 +70,27 @@ public class Solver {
 	 * filtrado inicial..
 	 ***/
 
-	public Set<Persona> calcular(Requerimiento req) {
-	    ArrayList<HashSet<Persona>> primerFiltroSuperanRequerimientos = new ArrayList<>();
-	    filtrarLosQueSuperanRequerimiento(req, primerFiltroSuperanRequerimientos);
+	public HashSet<Persona> calcular(Requerimiento req) {
+		ArrayList<HashSet<Persona>> primerFiltroSuperanRequerimientos = new ArrayList<>();
+		filtrarLosQueSuperanRequerimiento(req, primerFiltroSuperanRequerimientos);
 
-	    HashSet<Persona> mejorCandidato = new HashSet<>();
-	    for (int i = 0; i < primerFiltroSuperanRequerimientos.size(); i++) {
-	       ArrayList<HashSet<Persona>> todosLosSubConjuntosPosibles = obtenerTodosLosSubConjuntosPosibles(
-	                primerFiltroSuperanRequerimientos.get(i));
+		HashSet<Persona> mejorCandidato = new HashSet<>();
+		for (int i = 0; i < primerFiltroSuperanRequerimientos.size(); i++) {
+			ArrayList<HashSet<Persona>> todosLosSubConjuntosPosibles = obtenerTodosLosSubConjuntosPosibles(
+					primerFiltroSuperanRequerimientos.get(i));
 
-	        for (int j = 0; j < todosLosSubConjuntosPosibles.size(); j++) {
-	            HashSet<Persona> subconjuntoActual = todosLosSubConjuntosPosibles.get(j);
+			for (int j = 0; j < todosLosSubConjuntosPosibles.size(); j++) {
+				HashSet<Persona> subconjuntoActual = todosLosSubConjuntosPosibles.get(j);
 
-	            if (conjuntoCumpleRequerimientos(subconjuntoActual, req)
-	                    && Auxiliares.sonCompatibles(subconjuntoActual)
-	                    && esMejorCalificadoQueElSet(subconjuntoActual, mejorCandidato)) {
-	                mejorCandidato = new HashSet<>(subconjuntoActual);
-	            }
-	        }
-	    }
+				if (conjuntoCumpleRequerimientos(subconjuntoActual, req) && Auxiliares.sonCompatibles(subconjuntoActual)
+						&& esMejorCalificadoQueElSet(subconjuntoActual, mejorCandidato)) {
+					mejorCandidato = new HashSet<>(subconjuntoActual);
+				}
+			}
+		}
 
-	    return mejorCandidato;
+		return mejorCandidato;
 	}
-
 
 	/**
 	 * Recorre los vertices/personas del grafo y agrega a la lista solo los
@@ -208,16 +222,89 @@ public class Solver {
 		}
 
 	}
-	
-	/**Se va usar para el algoritmo euristico o tambien para los hilos, si uno encuentra el mejor set le avisa al resto que dejen de correr.*/
-	private boolean isTheBestSet(Set<Persona> conjunto,Requerimiento req) {
-		int maximoPosible=req.getCantArquitecto()*5+req.getCantLiderProyecto()*5+req.getCantProgramador()*5+req.getCantTester()*5;
-		int calificacionConjunto=0;
-		for(Persona p:conjunto) {
-			calificacionConjunto=calificacionConjunto+p.getCalificacion();
+
+	/** Se va usar para el algoritmo euristico. */
+	private boolean isTheBestSet(Set<Persona> conjunto, Requerimiento req) {
+		int maximoPosible = req.getCantArquitecto() * 5 + req.getCantLiderProyecto() * 5 + req.getCantProgramador() * 5
+				+ req.getCantTester() * 5;
+		int calificacionConjunto = 0;
+		for (Persona p : conjunto) {
+			calificacionConjunto = calificacionConjunto + p.getCalificacion();
 		}
-		return maximoPosible<=calificacionConjunto;
+		return maximoPosible <= calificacionConjunto;
+
+	}
+
+	/****
+	 * En esta heuristica se va intentar resolver el problema del enunciado del tp,
+	 * pero no se usara el metodo de backTracking que genera todos los subconjuntos
+	 * posibles Solo revisara los subconjuntos iniciales y se quedara con el que
+	 * todos sean compatibles con todos y superen requerimientos.
+	 */
+	public HashSet<Persona> resolverHeuristica(Requerimiento req) {
+
+		ArrayList<HashSet<Persona>> primerFiltroSuperanRequerimientos = new ArrayList<>();
+		filtrarLosQueSuperanRequerimiento(req, primerFiltroSuperanRequerimientos);
+
+		HashSet<Persona> mejorCandidato = new HashSet<>();
+		for (int i = 0; i < primerFiltroSuperanRequerimientos.size(); i++) {
+
+			if (Auxiliares.sonCompatibles(primerFiltroSuperanRequerimientos.get(i))
+					&& esMejorCalificadoQueElSet(primerFiltroSuperanRequerimientos.get(i), mejorCandidato)) {
+				mejorCandidato = new HashSet<>(primerFiltroSuperanRequerimientos.get(i));
+				if (isTheBestSet(primerFiltroSuperanRequerimientos.get(i), req)) {
+					reducirConjunto(req, mejorCandidato);
+					return mejorCandidato;
+
+				}
+			}
+
+		}
+		reducirConjunto(req, mejorCandidato);
+		return mejorCandidato;
+
+	}
+	/**Reduce el conjunto pasado a un conjunto que cumpla estrictamente los requerimientos.**/
+	private void reducirConjunto(Requerimiento req, HashSet<Persona> mejorCandidato) {
 		
+		int countLiderDeProyecto = 0;
+		int countArquitecto = 0;
+		int countProgramador = 0;
+		int countTester = 0;
+
+		Iterator<Persona> iterator = mejorCandidato.iterator();
+		while (iterator.hasNext()) {
+		    Persona p = iterator.next();
+			String rol = p.get_rol();
+
+			if ("Lider".equals(rol) && countLiderDeProyecto < req.getCantLiderProyecto()) {
+				countLiderDeProyecto = countLiderDeProyecto + 1;
+			} else if ("Arquitecto".equals(rol) && countArquitecto < req.getCantArquitecto()) {
+				countArquitecto = countArquitecto + 1;
+			} else if ("Programador".equals(rol) && countProgramador < req.getCantProgramador()) {
+				countProgramador = countProgramador + 1;
+			} else if ("Tester".equals(rol) && countTester < req.getCantTester()) {
+				countTester = countTester + 1;
+			}
+			
+			else {
+				iterator.remove();
+
+			}
+
+		}
+	}
+
+	@Override
+	public void run() {
+		HashSet<Persona> actual = calcular(this._req);
+
+		synchronized (bloqueo) {
+			if (esMejorCalificadoQueElSet(actual, this._mejor)) {
+				this._mejor.clear(); // Limpiar el contenido actual de _mejor
+				this._mejor.addAll(actual); // Agregar los elementos de actual a _mejor
+			}
+		}
 	}
 
 }

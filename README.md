@@ -26,8 +26,8 @@ TASK TO DO:
 
 - [x] Revisar el codigo de la clase clique, y generar codigo que genere un ArrayList de cliques.  (bestialidad)
 - [x] Hacer un codigo que al pasarle una lista de personas() diga si esa lista es o no es clique nuestro GrafoReal.
-- [ ] Aplicar hilos al codigo de fuerza bruta implementado
-- [ ] Crear una euristica que resuelva el problema en menor orden que fuerza bruta 
+- [x] Aplicar hilos al codigo de fuerza bruta implementado
+- [x] Crear una heuristica que resuelva el problema en menor orden que fuerza bruta 
 
 
 

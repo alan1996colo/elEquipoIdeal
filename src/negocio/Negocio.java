@@ -1,6 +1,7 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Compatibles.Solver;
 import data.GestorArchivos;
@@ -40,12 +41,34 @@ public class Negocio {
 		}
 	}
 
-	/** Calcula el equipo ideal del enunciado del tp **/
+	/** Calcula el equipo ideal del enunciado del tp usando hilos como se solicitaba. **/
 	public String calcularEquipoIdeal() {
-		Solver solver = new Solver(this.personas);
+		HashSet <Persona> mejor=new HashSet<Persona>();
+		Object bloqueo = new Object();
+		ArrayList<Thread> hilos = new ArrayList<>(); 
+		for(Persona p:this.personas.getPersonas()) {
+			GrafoLista temp=new GrafoLista();
+			temp.agregarPersona(p);
+			Solver solver = new Solver(temp, this.req, mejor, bloqueo);
+			Thread t1=new Thread(solver);
+			 hilos.add(t1);
+			t1.start();
+		}
+		for (Thread t : hilos) {
+	        try {
+	            t.join();
+	        } catch (InterruptedException e) {
+	            System.out.print(e);
+	        }
+	    }
+		
 
-		return solver.calcular(this.req).toString();
+		return mejor.toString();
 	}
+	
+	
+	
+	
 
 	/**
 	 * Reemplaza el grafo actual por el cargado desde el archivo y lo inicializa.

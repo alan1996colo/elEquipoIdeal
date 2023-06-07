@@ -88,7 +88,9 @@ public class NegocioTest {
 	}
 
 	@Test
-	/*Estos test son visuales, para test de assertions revisar la clase solverTest*/
+	/*
+	 * Estos test son visuales, para test de assertions revisar la clase solverTest
+	 */
 	public void calcularEquipoIdealTestSimple() {
 		negocio.agregarPersona("nicolas", 1, "Tester");
 		negocio.agregarPersona("Alberto", 2, "Arquitecto");
@@ -102,9 +104,9 @@ public class NegocioTest {
 		negocio.agregarCompatibilidad("Alberto", "Jose");
 		negocio.agregarCompatibilidad("Gerardo", "Alberto");
 
-		negocio.cargarRequerimientos(1, 1, 1, 1);
+		negocio.cargarRequerimientos(0, 1, 1, 1);
 		// jose, gerardo, alberto
-		System.out.println(negocio.calcularEquipoIdeal());
+		System.out.println("test simple" + negocio.calcularEquipoIdeal());
 	}
 
 	@Test
@@ -137,7 +139,7 @@ public class NegocioTest {
 		negocio.agregarCompatibilidad("Jose", "juan");
 		negocio.cargarRequerimientos(1, 1, 1, 1);
 		// nicolas, gerardo, alberto
-		System.out.println(negocio.calcularEquipoIdeal());
+		System.out.println("Test todos" + negocio.calcularEquipoIdeal());
 
 	}
 
