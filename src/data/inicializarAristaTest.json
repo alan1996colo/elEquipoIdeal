@@ -1,0 +1,47 @@
+[
+  {
+    "_apellido": "Alan",
+    "_calificacion": 2,
+    "_rol": "Liderd",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Alan",
+        "personaDestinoNombre": "Alejandro"
+      },
+      {
+        "personaOrigenNombre": "Alan",
+        "personaDestinoNombre": "Hernan"
+      }
+    ]
+  },
+  {
+    "_apellido": "Hernan",
+    "_calificacion": 2,
+    "_rol": "Tester",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Hernan",
+        "personaDestinoNombre": "Alan"
+      },
+      {
+        "personaOrigenNombre": "Hernan",
+        "personaDestinoNombre": "Alejandro"
+      }
+    ]
+  },
+  {
+    "_apellido": "Alejandro",
+    "_calificacion": 2,
+    "_rol": "Arquitecto",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "Alejandro",
+        "personaDestinoNombre": "Alan"
+      },
+      {
+        "personaOrigenNombre": "Alejandro",
+        "personaDestinoNombre": "Hernan"
+      }
+    ]
+  }
+]

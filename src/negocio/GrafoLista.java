@@ -110,15 +110,21 @@ public class GrafoLista implements Serializable {
 	 * grafo tiene complejidad O(n^*3)
 	 */
 	public void inicializarAristas() {
-		for (Persona origen : this.Personas) {
-			Set<Arista> compatibles = new HashSet<>(origen.getCompatibles());
-			for (Arista ar : compatibles) {
-				Arista nuevaArista = new Arista(origen, getPersona(ar.getPersonaDestinoNombre()));
-				origen.getCompatibles().remove(ar);
-				origen.getCompatibles().add(nuevaArista);
-			}
-		}
+	    for (Persona origen : this.Personas) {
+	        Set<Arista> compatibles = origen.getCompatibles();
+	        HashSet<Arista> nuevasAristas = new HashSet<>();
+	        for (Arista ar : compatibles) {
+	            Persona personaDestino = getPersona(ar.getPersonaDestinoNombre());
+	            Arista nuevaArista = new Arista(origen, personaDestino);
+	            nuevasAristas.add(nuevaArista);
+	        }
+	        origen.setCompatibles(nuevasAristas);
+	    }
 	}
+
+
+
+
 
 	/**
 	 * Retorna el objeto persona con el nombre pasado, retorna el primero que

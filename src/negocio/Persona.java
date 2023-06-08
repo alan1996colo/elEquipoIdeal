@@ -18,6 +18,10 @@ public class Persona implements Serializable {
 		this._calificacion = calificacion;
 		this._rol = _rol;
 	}
+	
+	public void setCompatibles(HashSet<Arista> asignar) {
+		this.compatibles=asignar;
+	}
 
 	// devuelvo los vecinos de un nodo
 	public Set<Arista> getCompatibles() {
@@ -61,7 +65,7 @@ public class Persona implements Serializable {
 
 	@Override
 	public String toString() {
-		return "[" + _apellido + ", calificacion = " + _calificacion + ", rol = " + _rol + "]";
+		return "[" + _apellido + ", calificacion = " + _calificacion + ", rol = " + _rol + "]\n";
 	}
 
 	@Override

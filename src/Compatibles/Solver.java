@@ -14,7 +14,6 @@ public class Solver implements Runnable {
 	private GrafoLista grafo;
 	private HashSet<Persona> _mejor;
 	private Requerimiento _req;
-	private Set<Persona> _actual;
 	private Object bloqueo;
 
 	public Set<Persona> get_mejor() {
@@ -23,14 +22,6 @@ public class Solver implements Runnable {
 
 	public void set_mejor(HashSet<Persona> _mejor) {
 		this._mejor = _mejor;
-	}
-
-	public Set<Persona> get_actual() {
-		return _actual;
-	}
-
-	public void set_actual(Set<Persona> _actual) {
-		this._actual = _actual;
 	}
 
 	/**
@@ -223,18 +214,6 @@ public class Solver implements Runnable {
 
 	}
 
-	/** Se va usar para el algoritmo euristico. */
-	private boolean isTheBestSet(Set<Persona> conjunto, Requerimiento req) {
-		int maximoPosible = req.getCantArquitecto() * 5 + req.getCantLiderProyecto() * 5 + req.getCantProgramador() * 5
-				+ req.getCantTester() * 5;
-		int calificacionConjunto = 0;
-		for (Persona p : conjunto) {
-			calificacionConjunto = calificacionConjunto + p.getCalificacion();
-		}
-		return maximoPosible <= calificacionConjunto;
-
-	}
-
 	/****
 	 * En esta heuristica se va intentar resolver el problema del enunciado del tp,
 	 * pero no se usara el metodo de backTracking que genera todos los subconjuntos
@@ -264,9 +243,25 @@ public class Solver implements Runnable {
 		return mejorCandidato;
 
 	}
-	/**Reduce el conjunto pasado a un conjunto que cumpla estrictamente los requerimientos.**/
+
+	/** Se va usar para el algoritmo euristico. */
+	private boolean isTheBestSet(Set<Persona> conjunto, Requerimiento req) {
+		int maximoPosible = req.getCantArquitecto() * 5 + req.getCantLiderProyecto() * 5 + req.getCantProgramador() * 5
+				+ req.getCantTester() * 5;
+		int calificacionConjunto = 0;
+		for (Persona p : conjunto) {
+			calificacionConjunto = calificacionConjunto + p.getCalificacion();
+		}
+		return maximoPosible <= calificacionConjunto;
+
+	}
+
+	/**
+	 * Reduce el conjunto pasado a un conjunto que cumpla estrictamente los
+	 * requerimientos.
+	 **/
 	private void reducirConjunto(Requerimiento req, HashSet<Persona> mejorCandidato) {
-		
+
 		int countLiderDeProyecto = 0;
 		int countArquitecto = 0;
 		int countProgramador = 0;
@@ -274,7 +269,7 @@ public class Solver implements Runnable {
 
 		Iterator<Persona> iterator = mejorCandidato.iterator();
 		while (iterator.hasNext()) {
-		    Persona p = iterator.next();
+			Persona p = iterator.next();
 			String rol = p.get_rol();
 
 			if ("Lider".equals(rol) && countLiderDeProyecto < req.getCantLiderProyecto()) {
@@ -286,7 +281,7 @@ public class Solver implements Runnable {
 			} else if ("Tester".equals(rol) && countTester < req.getCantTester()) {
 				countTester = countTester + 1;
 			}
-			
+
 			else {
 				iterator.remove();
 

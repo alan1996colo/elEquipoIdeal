@@ -1,0 +1,78 @@
+[
+  {
+    "_apellido": "ALAN",
+    "_calificacion": 1,
+    "_rol": "Tester",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "ALAN",
+        "personaDestinoNombre": "MARTIN"
+      },
+      {
+        "personaOrigenNombre": "ALAN",
+        "personaDestinoNombre": "JOSE"
+      },
+      {
+        "personaOrigenNombre": "ALAN",
+        "personaDestinoNombre": "GERARDO"
+      }
+    ]
+  },
+  {
+    "_apellido": "MARTIN",
+    "_calificacion": 1,
+    "_rol": "Programador",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "MARTIN",
+        "personaDestinoNombre": "GERARDO"
+      },
+      {
+        "personaOrigenNombre": "MARTIN",
+        "personaDestinoNombre": "ALAN"
+      },
+      {
+        "personaOrigenNombre": "MARTIN",
+        "personaDestinoNombre": "JOSE"
+      }
+    ]
+  },
+  {
+    "_apellido": "JOSE",
+    "_calificacion": 1,
+    "_rol": "Arquitecto",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "JOSE",
+        "personaDestinoNombre": "GERARDO"
+      },
+      {
+        "personaOrigenNombre": "JOSE",
+        "personaDestinoNombre": "ALAN"
+      },
+      {
+        "personaOrigenNombre": "JOSE",
+        "personaDestinoNombre": "MARTIN"
+      }
+    ]
+  },
+  {
+    "_apellido": "GERARDO",
+    "_calificacion": 1,
+    "_rol": "Lider",
+    "compatibles": [
+      {
+        "personaOrigenNombre": "GERARDO",
+        "personaDestinoNombre": "JOSE"
+      },
+      {
+        "personaOrigenNombre": "GERARDO",
+        "personaDestinoNombre": "ALAN"
+      },
+      {
+        "personaOrigenNombre": "GERARDO",
+        "personaDestinoNombre": "MARTIN"
+      }
+    ]
+  }
+]
